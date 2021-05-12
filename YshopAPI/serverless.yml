@@ -1,0 +1,16 @@
+service: Yshop-API # 앱 이름
+
+provider:
+  name: aws
+  runtime: nodejs14.x # Node JS 버전
+  memorySize: 512
+  timeout: 15
+  stage: production
+  region: ap-northeast-2 # AWS 지역
+
+function:
+  API:
+    handler: lambda.handler
+    event:
+      - HTTP: ANY {proxy +}
+      - HTTP: ANY /
