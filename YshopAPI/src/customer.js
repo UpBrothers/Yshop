@@ -1,6 +1,6 @@
 const dbconnect= require('./dbcon');
 
-exports.storeInfo=function(request,response){
+exports.storeinfo=function(request,response){
 
     var schema='Y#';
     dbconnect(schema,(error,{db})=>
@@ -14,7 +14,7 @@ exports.storeInfo=function(request,response){
         })
     );       
 };
-exports.categoryInfo=function(request,response){
+exports.categoryinfo=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>

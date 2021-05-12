@@ -1,6 +1,6 @@
 const dbconnect= require('./dbcon');
 
-exports.productList=function(request,response){
+exports.productlist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
@@ -17,7 +17,7 @@ exports.productList=function(request,response){
         })
     );       
 };
-exports.categoryList=function(request,response){
+exports.categorylist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
@@ -31,7 +31,7 @@ exports.categoryList=function(request,response){
         })
     );       
 };
-exports.benefitsList=function(request,response){
+exports.benefitslist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>

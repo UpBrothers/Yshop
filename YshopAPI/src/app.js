@@ -13,15 +13,15 @@ app.post('/registration/check',(request,response)=>common.check(request,response
 app.post('/login',(request,response)=>common.login(request,response));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.get('/customer/storeInfo',(request,response)=>customer.storeInfo(request,response));
-app.get('/customer/categoryInfo',(request,response)=>customer.categoryInfo(request,response));
+app.get('/customer/storeinfo',(request,response)=>customer.storeinfo(request,response));
+app.get('/customer/categoryinfo',(request,response)=>customer.categoryinfo(request,response));
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.get('/seller/productList',(request,response)=>seller.productList(request,response));
-app.get('/seller/categoryList',(request,response)=>seller.categoryList(request,response));
-app.get('/seller/benefitsList',(request,response)=>seller.benefitsList(request,response));
+app.get('/seller/productlist',(request,response)=>seller.productlist(request,response));
+app.get('/seller/categorylist',(request,response)=>seller.categorylist(request,response));
+app.get('/seller/benefitslist',(request,response)=>seller.benefitslist(request,response));
 
 
 app.listen(3000,function(){
