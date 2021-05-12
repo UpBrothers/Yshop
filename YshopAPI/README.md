@@ -81,7 +81,7 @@
 |------|---|
 |cnt : 0|cnt : 1|
 
-# 2. Registration(회원가입)
+# 3. Login(로그인)
 
 >- API URL :　
 >- 요청
@@ -108,3 +108,105 @@
 |로그인 성공|로그인 실패|
 |------|---|
 |ID : 해당 아이디|Fail|
+
+# 4. StoreInfo (스토어정보) - 구매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*URL|URL|www.yshop/cutomer/mingkey -> mingkey
+
+>- 응답
+
+|변수명|설명|
+|------|---|
+|shopName|스토어 이름
+|shopEmail|스토어 이메일
+|businessNo|사업자번호
+|shopPhone|스토어 전화번호
+|shopAddress|스토어 주소
+
+# 5. CategoryInfo (카테고리정보) - 구매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+
+>- 응답
+>   > 카테고리 정렬 순서대로 응답
+
+|변수명|설명|
+|------|---|
+|gorupName1|그룹 대분류 이름
+|gorupName2|그룹 중분류 이름
+|gorupName3|그룹 소분류 이름
+
+
+# 6. ProductList (상품조회) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+
+>- 응답
+
+|변수명|설명|
+|------|---|
+|productPK|상품 고유번호
+|name|상품 이름
+|price|상품 가격
+|stock|상품 재고수량 (모든 옵션 포함)
+|status|판매 상태
+|registrationDate|등록일자
+|groupPk1|그룹 대분류 고유번호
+|gorupName1|그룹 대분류 이름
+|gorupPk2|그룹 중분류 고유번호
+|gorupName2|그룹 중분류 이름
+|groupPK3|그룹 소분류 고유번호
+|gorupName3|그룹 소분류 이름
+
+# 7. CategoryList (카테고리정보) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+
+>- 응답
+
+|변수명|설명|
+|------|---|
+|gorupName1|그룹 대분류 이름
+|gorupName2|그룹 중분류 이름
+|gorupName3|그룹 소분류 이름
+
+# 8. BenefitsList (혜택 정보) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+
+>- 응답
+
+|변수명|설명|
+|------|---|
+|discountPK|할인정보 고유번호
+|discountName|할인 이름
+|flag|할인 대상(전체, 그룹별, 상품)
+|target|할인 대상 고유번호
+|dcRate|할인률
+|startDate|할인 시작일
+|endDate|할인 마감일

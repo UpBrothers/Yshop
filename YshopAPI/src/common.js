@@ -1,6 +1,6 @@
 const dbconnect= require('./dbcon');
 
-exports.Registration=function(request,response){
+exports.registration=function(request,response){
 
     var post=request.body;
     var schema;
@@ -36,7 +36,7 @@ exports.Registration=function(request,response){
         break;
     }
 };
-exports.Check=function(request,response){
+exports.check=function(request,response){
 
     var post=request.body;
     var schema;
@@ -143,7 +143,7 @@ exports.Check=function(request,response){
         break;
     }
 };
-exports.Login=function(request,response){
+exports.login=function(request,response){
 
     var post=request.body;
     var schema;
