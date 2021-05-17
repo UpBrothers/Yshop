@@ -173,7 +173,23 @@
 |groupPK3|그룹 소분류 고유번호
 |gorupName3|그룹 소분류 이름
 
-# 7. CategoryList (카테고리정보) - 판매자
+# 7. RemoveProduct (상품 삭제) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*productPK|상품 고유번호|3
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail
+
+# 8. CategoryList (카테고리정보) - 판매자
 
 >- API URL :　
 >- 요청
@@ -190,7 +206,39 @@
 |gorupName2|그룹 중분류 이름
 |gorupName3|그룹 소분류 이름
 
-# 8. BenefitsList (혜택 정보) - 판매자
+# 9. AddCategory (카테고리 등록) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*list [ (1) 대분류, (1) 중분류, (1) 소분류]|카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능|[의류, 상의, 티셔츠], [의류, 상의], [의류]|
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail
+
+# 10. AddCategory (카테고리 등록) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*list [ (1) 대분류, (1) 중분류, (1) 소분류]|카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능|[의류, 상의, 티셔츠], [의류, 상의], [의류]|
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail
+
+# 11. BenefitsList (혜택 정보) - 판매자
 
 >- API URL :　
 >- 요청
@@ -210,3 +258,43 @@
 |dcRate|할인률
 |startDate|할인 시작일
 |endDate|할인 마감일
+
+
+# 12. AddBenefits (혜택 등록) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey|
+|*discountName|할인 명|3
+|*flag|할인 범위|1, 2 (그룹별, 상품별)
+|(1) target1|그룹 고유번호|3
+|(1) target2|상품 고유번호|4
+|*dcRate|할인률|5
+|*startDate|할인 시작일|2020-10-12
+|*endDate|할인 마감일|2020-10-12
+
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail
+
+# 13. RemoveBenefits (혜택 삭제) - 판매자
+
+>- API URL :　
+>- 요청
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*discountPK|혜택 고유번호|3
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail

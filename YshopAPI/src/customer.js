@@ -1,7 +1,6 @@
 const dbconnect= require('./dbcon');
 
 exports.storeinfo=function(request,response){
-
     var schema='Y#';
     dbconnect(schema,(error,{db})=>
     db.query(`SELECT shopName, shopEmail, businessNo,shopPhone,shopAddress FROM Seller where URL=?`,[request.query.URL],

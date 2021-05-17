@@ -20,8 +20,13 @@ app.get('/customer/categoryinfo',(request,response)=>customer.categoryinfo(reque
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get('/seller/productlist',(request,response)=>seller.productlist(request,response));
+app.post('/seller/removeproduct',(request,response)=>seller.removeproduct(request,response));
 app.get('/seller/categorylist',(request,response)=>seller.categorylist(request,response));
+app.post('/seller/addcategory',(request,response)=>seller.addcategory(request,response));
+app.post('/seller/removecategory',(request,response)=>seller.removecategory(request,response));
 app.get('/seller/benefitslist',(request,response)=>seller.benefitslist(request,response));
+app.post('/seller/addbenefits',(request,response)=>seller.addbenefits(request,response));
+app.post('/seller/removebenefits',(request,response)=>seller.removebenefits(request,response));
 
 
 app.listen(3000,function(){
