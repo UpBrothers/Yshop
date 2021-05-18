@@ -1,4 +1,3 @@
-const db = require('./db');
 const dbconnect= require('./dbcon');
 
 exports.productlist=function(request,response){
@@ -78,6 +77,7 @@ exports.addcategory=function(request,response){
                                 if(error4){
                                         response.send("Fail");
                                 }else{
+                                    console.log("success")
                                         response.send("Success");
                                 }
                             })

@@ -269,7 +269,7 @@
 |------|---|---|
 |*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey|
 |*discountName|할인 명|3
-|*flag|할인 범위|1, 2 (그룹별, 상품별)
+|*flag|할인 범위|1, 2, 3, 4 (대분류, 중분류, 소분류, 상품별)
 |(1) target1|그룹 고유번호|3
 |(1) target2|상품 고유번호|4
 |*dcRate|할인률|5

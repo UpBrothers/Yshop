@@ -6,7 +6,8 @@ var dbconnect = (schema,callback)=>{
         host: dbinfo.host,
         user : dbinfo.user,               
         password : dbinfo.password,
-        database : schema
+        database : schema,
+        multipleStatements: true
     });
     db.connect();
 

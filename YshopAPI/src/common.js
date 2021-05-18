@@ -1,4 +1,6 @@
 const dbconnect= require('./dbcon');
+const common = require('./createtemplate');
+const createtemplate = require('./createtemplate');
 
 exports.registration=function(request,response){
 
@@ -15,7 +17,14 @@ exports.registration=function(request,response){
                 if(error){
                     response.send("Fail");
                 }else{
-                    response.send("Success");
+                    createtemplate(post.URL,(error,{value})=>{
+                        if(error){
+                            response.send("Fail")
+                        }   
+                        else{
+                            response.send("Success");
+                        }      
+                    })
                 }
             })
         );
