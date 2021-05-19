@@ -1,7 +1,7 @@
 # 1. Registration(회원가입)
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
   
 >   > - 판매자 
@@ -43,10 +43,10 @@
 |------|---|
 |Success|Fail
 
-# 2. Registration(회원가입)
+# 2. Check(중복확인)
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 >   >   - 판매자 
 
@@ -84,7 +84,7 @@
 # 3. Login(로그인)
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 >   > - 판매자, 구매자
 
@@ -112,7 +112,7 @@
 # 4. StoreInfo (스토어정보) - 구매자
 
 >- API URL :　
->- 요청
+>- 요청 (GET)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -131,7 +131,7 @@
 # 5. CategoryInfo (카테고리정보) - 구매자
 
 >- API URL :　
->- 요청
+>- 요청 (GET)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -150,7 +150,7 @@
 # 6. ProductList (상품조회) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (GET)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -176,7 +176,7 @@
 # 7. RemoveProduct (상품 삭제) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -192,7 +192,7 @@
 # 8. CategoryList (카테고리정보) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (GET)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -209,7 +209,7 @@
 # 9. AddCategory (카테고리 등록) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -222,10 +222,10 @@
 |------|---|
 |Success|Fail
 
-# 10. AddCategory (카테고리 등록) - 판매자
+# 10. RemoveCategory(카테고리 삭제) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -241,7 +241,7 @@
 # 11. BenefitsList (혜택 정보) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (GET)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -263,7 +263,7 @@
 # 12. AddBenefits (혜택 등록) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -286,7 +286,7 @@
 # 13. RemoveBenefits (혜택 삭제) - 판매자
 
 >- API URL :　
->- 요청
+>- 요청 (POST)
 
 |변수명|설명|ex|
 |------|---|---|
@@ -298,3 +298,29 @@
 |성공|실패|
 |------|---|
 |Success|Fail
+
+# 14. ShowProductList(상품 목록 전체) - 구매자
+
+>- API URL :　
+>- 요청 (GET)
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+
+>- 응답
+
+|변수명|설명|
+|------|---|
+|productPK|상품 고유번호
+|name|상품 명
+|price|상품 가격
+|status|판매 상태
+|views|조회 수
+|thumbnail|상품 썸네일
+|registrationDate|상품 등록일
+|star|상품 평균 별점
+|count|상품 후기 수
+|likecount|상품 좋아요 수
+|stock|상품 재고수
+|dcRate|할인률

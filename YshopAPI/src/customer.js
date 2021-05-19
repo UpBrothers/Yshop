@@ -27,3 +27,17 @@ exports.categoryinfo=function(request,response){
         })
     );       
 };
+exports.showproductlist=function(request,response){
+
+    var schema=request.query.schema;
+    dbconnect(schema,(error,{db})=>
+    db.query(`SELECT * FROM Product_Info_View`,
+        function(error,value){         
+            if(error){
+                    response.send("Fail");
+            }else{
+                    response.send(value);
+            }
+        })
+    );       
+};

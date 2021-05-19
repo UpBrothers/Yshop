@@ -15,6 +15,7 @@ app.post('/login',(request,response)=>common.login(request,response));
 
 app.get('/customer/storeinfo',(request,response)=>customer.storeinfo(request,response));
 app.get('/customer/categoryinfo',(request,response)=>customer.categoryinfo(request,response));
+app.get('/customer/showproductlist',(request,response)=>customer.showproductlist(request,response));
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
