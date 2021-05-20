@@ -324,3 +324,159 @@
 |likecount|상품 좋아요 수
 |stock|상품 재고수
 |dcRate|할인률
+
+# 15. ProductInfo(상품 상세보기) - 구매자
+
+>- API URL :　
+>- 요청 (GET)
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*productPK|상품 고유번호|1
+
+>- 응답
+
+|변수명|||설명|실패|
+|:--:|-|--|---|--|
+|result|Product_Info_View|productPK|상품 고유번호|Fail
+|||name|상품 명
+|||price|상품 가격
+|||status|판매 상태
+|||views|조회 수
+|||thumbnail|상품 썸네일
+|||registrationDate|상품 등록일
+|||star|상품 평균 별점
+|||count|상품 후기 수
+|||likecount|상품 좋아요 수
+|||stock|상품 재고수
+|||dcRate|할인률
+||Option|stockPK|옵션 고유 번호
+|||productPK|상품 고유번호
+|||option1PK|1번째 옵션
+|||option2PK|2번째 옵션
+|||option3PK|3번째 옵션
+|||stock|해당 옵션 재고 수
+|||extraCharge|해당 옵션 추가 금액
+||Review|purchasePK|구매 고유 번호
+|||ID|후기 등록 고객 아이디
+|||title|후기 제목
+|||context|후기 본문
+|||image|후기 이미지(없으면:null)
+|||star|별 점
+|||registrationDate|후기 등록일
+||QnA|ID|문의 등록 고객 아이디
+|||productPK|상품 고유 번호
+|||title|문의 제목
+|||context|문의 본문
+|||registrationDate|문의 등록일
+|||answer|문의 답변 내용
+|||answerDate|문의 답변 일
+|||flage|문의 종류(0: 상품문의, 1: 제고문의, 2: 배송문의)
+
+
+# 16. ProductInfo(상품 상세보기) - 판매자
+
+>- API URL :　
+>- 요청 (GET)
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*productPK|상품 고유번호|1
+
+>- 응답
+
+|변수명|||설명|실패|
+|:--:|-|--|---|--|
+|result|Product_Info_View|productPK|상품 고유번호|Fail
+|||name|상품 명
+|||price|상품 가격
+|||status|판매 상태
+|||views|조회 수
+|||thumbnail|상품 썸네일
+|||registrationDate|상품 등록일
+|||star|상품 평균 별점
+|||count|상품 후기 수
+|||likecount|상품 좋아요 수
+|||stock|상품 재고수
+|||dcRate|할인률
+||Option|stockPK|옵션 고유 번호
+|||productPK|상품 고유번호
+|||option1PK|1번째 옵션
+|||option2PK|2번째 옵션
+|||option3PK|3번째 옵션
+|||stock|해당 옵션 재고 수
+|||extraCharge|해당 옵션 추가 금액
+||Product_Group_View|purchasePK|구매 고유 번호
+|||groupPK1|대분류 고유 번호
+|||groupName1|대분류 이름
+|||groupPK1|중분류 고유 번호
+|||groupName1|중분류 이름
+|||groupPK1|소분류 고유 번호
+|||groupName1|소분류 이름
+
+# 17. AddProduct(상품 등록) - 판매자
+
+>- API URL :　
+>- 요청 (GET)
+
+|변수명||설명||ex|
+|:---:|----|----|-----|----|
+|*schema||스키마 명||www.yshop/cutomer/mingkey -> mingkey
+|*name||상품 명||쫀쫀한 반팔티
+|*price||상품 가격||19900
+|*thumbnail||상품 썸네일 이미지 URL||www.s3.test/test.png
+|*image[]||상품 본문 이미지 URL(최소 1장, 최대 3장)||www.s3.test/test.png
+|*option[]||상품 옵션 명(최소 0개, 최대 3개)||색상, 사이즈, 길이
+|*registration||상품 등록일||2021-05-21
+|*status||상품 판매 상태||1 (판매 중), 0 (판매 중단 or 품절), -1(삭제된 상품)
+|*optionstock[]|*option[]|옵션 경우의 수|옵션 선택|[블랙, L], [화이트, M]
+||*stock||해당 옵션 재고 수|50
+||*extraCharge||해당 옵션 추가 금액|5000
+|*list [ (1) 대분류, (1) 중분류, (1) 소분류]||카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능||[의류, 상의, 티셔츠],[의류, 상의],[의류]
+
+<br>
+
+>- 요청 예시
+
+{<br>
+    　"schema" : "shop_template",<br>
+    　"name" : "안녕",<br>
+    　"price" : "90000",<br>
+    　"thumbnail" : "www",<br>
+    　"image" : ["naver"],<br>
+    　"option" : ["색상","사이즈"],<br>
+    　"registration" : "2021-07-30",<br>
+    　"status" :"1",<br>
+    　"optionstock" : [<br>
+        　　{<br>
+        　　　"option" : ["블랙","L"],<br>
+        　　　"stock" : "50",<br>
+        　　　"extraCharge" : "50"<br>
+        　　},<br>
+        　　{<br>
+        　　　"option" : ["파랑","M"],<br>
+        　　　"stock" : "100",<br>
+        　　　"extraCharge" : "9000"<br>
+        　　},<br>
+        　　{<br>
+        　　　"option" : ["보라","S"],<br>
+        　　　"stock" : "190",<br>
+        　　　"extraCharge" : "900"<br>
+        　　},<br>
+        　　{<br>
+        　　　"option" : ["빨강","L"],<br>
+        　　　"stock" : "110",<br>
+        　　　"extraCharge" : "100"<br>
+        　　}<br>
+    　],<br>
+    　"list" : ["의류","하의","청바지"]<br>
+}<br>
+
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail

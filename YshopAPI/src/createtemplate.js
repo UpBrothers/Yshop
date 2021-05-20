@@ -54,9 +54,9 @@ const createtemplate = (schema, callback) => {
     `CREATE TABLE Stock (
       stockPK int NOT NULL AUTO_INCREMENT,
       productPK int NOT NULL,
-      option1PK int DEFAULT NULL,
-      option2PK int DEFAULT NULL,
-      option3PK int DEFAULT NULL,
+      option1PK varchar(45) DEFAULT NULL,
+      option2PK varchar(45) DEFAULT NULL,
+      option3PK varchar(45) DEFAULT NULL,
       stock int NOT NULL,
       extraCharge int NOT NULL,
       PRIMARY KEY (stockPK),
