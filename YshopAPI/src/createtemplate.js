@@ -8,7 +8,7 @@ const createtemplate = (schema, callback) => {
       ID varchar(16) NOT NULL,
       PW varchar(32) NOT NULL,
       name varchar(16) NOT NULL,
-      phone varchar(11) NOT NULL,
+      phone varchar(20) NOT NULL,
       email varchar(32) NOT NULL,
       birthdate date NOT NULL,
       gender varchar(1) NOT NULL,

@@ -480,3 +480,45 @@
 |성공|실패|
 |------|---|
 |Success|Fail
+
+
+# 18. Find (아이디, 비밀번호 찾기) - 구매자, 판매자
+
+>- API URL :　
+>- 요청 (POST)
+
+||변수명|설명|ex|
+|-|------|---|---|
+||*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+||*from|판매자, 구매자 구분|seller or customer
+||*flag|아이디 찾기, 비밀번호 찾기 구분|ID or PW
+|(1) 중 하나 선택|(1) name|회원 이름(아이디 찾기 일 때 선택)|김철수
+||(1) ID|회원 아이디(비밀전호 찾기 일 때 선택)|dsfw
+||*key|(2) 중 하나 선택|phone or email
+|(2) 중 하나 선택|(2) phone|회원 전화번호(전화번호로 찾기 일 때  선택)|010-2222-2222
+||(2) email|회원 이메일(이메일로 찾기 일 때  선택)|qwer@naver.com
+
+>- 응답
+
+|구분|찾은 경우|못 찾은 경우|
+|------|----|----|
+|아이디 찾기|해당 아이디|[]
+|비밀번호 찾기|cnt = 1|cnt = 0
+
+# 19. ModifyPW (비밀번호 수정) - 구매자, 판매자
+
+>- API URL :　
+>- 요청 (POST)
+
+|변수명|설명|ex|
+|------|---|---|
+|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
+|*from|판매자, 구매자 구분|seller or custome*r
+|*ID|회원 아이디|kmg
+|*PW|변경 할 비밀번호|werf12343
+
+>- 응답
+
+|성공|실패|
+|------|---|
+|Success|Fail

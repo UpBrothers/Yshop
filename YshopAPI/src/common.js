@@ -184,3 +184,112 @@ exports.login=function(request,response){
         break;
     }
 };
+exports.find=function(request,response){
+
+    var post=request.body;
+    var schema;
+
+    switch(post.from){
+        case 'seller':
+
+        break;
+        case 'customer':
+            switch(post.flag){
+                case 'ID':
+                    switch(post.key){
+                       case 'phone':
+                            schema=post.schema;
+                            dbconnect(schema,(error,{db})=>
+                            db.query(`select ID from Customer where name=? and phone=?`,[post.name,post.phone],
+                            function(error,value){         
+                                if(error){
+                                    response.send("Fail");
+                                }else{
+                                    response.send(value);
+                                }
+                            })
+                            );
+                        break;
+                        case 'email':
+                            schema=post.schema;
+                            dbconnect(schema,(error,{db})=>
+                            db.query(`select ID from Customer where name=? and email=?`,[post.name,post.email],
+                            function(error,value){         
+                                if(error){
+                                    response.send("Fail");
+                                }else{
+                                    response.send(value);
+                                }
+                            })
+                            );
+                        break;
+                    }
+                break;
+                case 'PW':
+                    switch(post.key){
+                        case 'phone':
+                             schema=post.schema;
+                             dbconnect(schema,(error,{db})=>
+                             db.query(`select count(*) cnt from Customer where ID=? and phone=?`,[post.ID,post.phone],
+                             function(error,value){         
+                                 if(error){
+                                     response.send("Fail");
+                                 }else{
+                                     response.send(value);
+                                 }
+                             })
+                             );
+                         break;
+                         case 'email':
+                             schema=post.schema;
+                             dbconnect(schema,(error,{db})=>
+                             db.query(`select count(*) cnt from Customer where ID=? and email=?`,[post.ID,post.email],
+                             function(error,value){         
+                                 if(error){
+                                     response.send("Fail");
+                                 }else{
+                                     response.send(value);
+                                 }
+                             })
+                             );
+                         break;
+                     }
+                break;
+            }
+        break;
+    }
+};
+exports.modifypw=function(request,response){
+
+    var post=request.body;
+    var schema;
+
+    switch(post.from){
+        case 'seller':
+            schema='Y#';
+            dbconnect(schema,(error,{db})=>
+            db.query(`update Seller set PW=? where ID=?`,[post.PW,post.ID],
+            function(error,value){
+                if(error){
+                    response.send("Fail");
+                }else{
+                    response.send("Succe");
+                }
+            })
+        );
+        break;
+        case 'customer':
+            schema=post.schema;
+            dbconnect(schema,(error,{db})=>
+            db.query(`update Customer set PW=? where ID=?`,[post.PW,post.ID],
+            function(error,value){         
+                if(error){
+                    response.send("Fail");
+                }else{
+                    response.send("Succe");
+                }
+            })
+        );
+        break;
+    }
+};

@@ -11,6 +11,9 @@ app.use(bodyParser.json());
 app.post('/registration',(request,response)=>common.registration(request,response));
 app.post('/registration/check',(request,response)=>common.check(request,response));
 app.post('/login',(request,response)=>common.login(request,response));
+app.post('/find',(request,response)=>common.find(request,response));
+app.post('/modifypw',(request,response)=>common.modifypw(request,response));
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get('/customer/storeinfo',(request,response)=>customer.storeinfo(request,response));
