@@ -1,0 +1,66 @@
+td img {
+  width: inherit;
+  height: inherit;
+  object-fit: contain;
+}
+#dcRate {
+  color: saddlebrown;
+  font-weight: bolder;
+  text-align: center;
+  font-size: 25px;
+}
+#orginalPrice {
+  text-decoration-line: line-through;
+  color: gray;
+  font-size: 15px;
+}
+#dcPrice {
+  font-weight: bolder;
+  font-size: 25px;
+}
+.productSummary {
+  margin-left: auto;
+  margin-right: auto;
+}
+#totalPrice {
+  color: saddlebrown;
+  font-size: 25px;
+  font-weight: bolder;
+}
+#productName {
+  font-weight: bolder;
+  font-size: 30px;
+}
+#divSummary {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+#divSummary button,
+input {
+  border: none;
+}
+#divSummary input {
+  border: none;
+  background-color: navy;
+  color: white;
+}
+.stockDelete {
+  background-color: white;
+}
+#divDetail {
+  /* border:solid gray 1px; */
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  text-align: center;
+}
+#divDetail img {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: inherit;
+  height: inherit;
+  max-width: 1000px;
+  max-height: 1000px;
+  object-fit: scale-down;
+}
