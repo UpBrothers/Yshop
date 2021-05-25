@@ -120,13 +120,20 @@
 
 >- 응답
 
-|변수명|설명|
-|------|---|
-|shopName|스토어 이름
-|shopEmail|스토어 이메일
-|businessNo|사업자번호
-|shopPhone|스토어 전화번호
-|shopAddress|스토어 주소
+||변수명|설명|
+|--|------|---|
+|storeinfo|name|스토어 대표자 명
+||shopName|스토어 이름
+||shopEmail|스토어 이메일
+||image|스토어 이미지
+||businessNo|사업자번호
+||shopPhone|스토어 전화번호
+||shopAddress|스토어 주소
+||description|스토어 설명
+|categoryinfo|gorupName1|그룹 대분류 이름
+||gorupName2|그룹 중분류 이름
+||gorupName3|그룹 소분류 이름
+
 
 # 5. CategoryInfo (카테고리정보) - 구매자
 
@@ -432,8 +439,8 @@
 |*registration||상품 등록일||2021-05-21
 |*status||상품 판매 상태||1 (판매 중), 0 (판매 중단 or 품절), -1(삭제된 상품)
 |*optionstock[]|*option[]|옵션 경우의 수|옵션 선택|[블랙, L], [화이트, M]
-||*stock||해당 옵션 재고 수|50
-||*extraCharge||해당 옵션 추가 금액|5000
+|||*stock||해당 옵션 재고 수|50
+|||*extraCharge||해당 옵션 추가 금액|5000
 |*list [ (1) 대분류, (1) 중분류, (1) 소분류]||카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능||[의류, 상의, 티셔츠],[의류, 상의],[의류]
 
 <br>

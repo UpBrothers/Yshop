@@ -14,6 +14,7 @@ exports.registration=function(request,response){
             db.query(`insert into Seller (ID,PW,name,phone,email,shopName,URL,businessNo,shopEmail,shopPhone,shopAddress) 
             values (?,?,?,?,?,?,?,?,?,?,?)`,[post.ID,post.PW,post.name,post.phone,post.email,post.shopName,post.URL,post.businessNo,post.shopEmail,post.shopPhone,post.shopAddress],
             function(error,value){
+                db.end();
                 if(error){
                     response.send("Fail");
                 }else{
@@ -34,7 +35,8 @@ exports.registration=function(request,response){
             dbconnect(schema,(error,{db})=>
             db.query(`insert into Customer (ID,PW,name,phone,email,birthdate,gender,address) 
             values (?,?,?,?,?,?,?,?)`,[post.ID,post.PW,post.name,post.phone,post.email,post.birthdate,post.gender,post.address],
-            function(error,value){         
+            function(error,value){      
+                db.end();   
                 if(error){
                     response.send("Fail");
                 }else{
@@ -58,6 +60,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where ID=?`,[post.ID],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -66,6 +69,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where phone=?`,[post.phone],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -74,6 +78,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where email=?`,[post.email],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -82,6 +87,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where shopName=?`,[post.shopName],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -90,6 +96,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where URL=?`,[post.URL],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -98,6 +105,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where businessNo=?`,[post.businessNo],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -106,6 +114,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where shopEmail=?`,[post.shopEmail],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -114,6 +123,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Seller where shopPhone=?`,[post.shopPhone],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -127,6 +137,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Customer where ID=?`,[post.ID],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -135,6 +146,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Customer where phone=?`,[post.phone],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -143,6 +155,7 @@ exports.check=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(`select count(*) cnt from Customer where email=?`,[post.email],
                     function(error,value){
+                        db.end();
                         response.send(value);
                     })
                 );
@@ -163,8 +176,8 @@ exports.login=function(request,response){
             dbconnect(schema,(error,{db})=>
             db.query(`SELECT URL FROM Seller where ID=? and PW=?`,[post.ID,post.PW],
             function(error,value){
+                db.end();
                 response.send(value);
-                console.log(value);
             })
         );
         break;
@@ -173,7 +186,8 @@ exports.login=function(request,response){
             console.log(schema);
             dbconnect(schema,(error,{db})=>
             db.query(`SELECT ID FROM Customer where ID=? and PW=?`,[post.ID,post.PW],
-            function(error,value){         
+            function(error,value){      
+                db.end();   
                 if(error){
                     response.send("Fail");
                 }else{
@@ -201,7 +215,8 @@ exports.find=function(request,response){
                             schema=post.schema;
                             dbconnect(schema,(error,{db})=>
                             db.query(`select ID from Customer where name=? and phone=?`,[post.name,post.phone],
-                            function(error,value){         
+                            function(error,value){       
+                                db.end();  
                                 if(error){
                                     response.send("Fail");
                                 }else{
@@ -214,7 +229,8 @@ exports.find=function(request,response){
                             schema=post.schema;
                             dbconnect(schema,(error,{db})=>
                             db.query(`select ID from Customer where name=? and email=?`,[post.name,post.email],
-                            function(error,value){         
+                            function(error,value){      
+                                db.end();   
                                 if(error){
                                     response.send("Fail");
                                 }else{
@@ -231,7 +247,8 @@ exports.find=function(request,response){
                              schema=post.schema;
                              dbconnect(schema,(error,{db})=>
                              db.query(`select count(*) cnt from Customer where ID=? and phone=?`,[post.ID,post.phone],
-                             function(error,value){         
+                             function(error,value){     
+                                db.end();    
                                  if(error){
                                      response.send("Fail");
                                  }else{
@@ -244,7 +261,8 @@ exports.find=function(request,response){
                              schema=post.schema;
                              dbconnect(schema,(error,{db})=>
                              db.query(`select count(*) cnt from Customer where ID=? and email=?`,[post.ID,post.email],
-                             function(error,value){         
+                             function(error,value){      
+                                db.end();   
                                  if(error){
                                      response.send("Fail");
                                  }else{
@@ -270,6 +288,7 @@ exports.modifypw=function(request,response){
             dbconnect(schema,(error,{db})=>
             db.query(`update Seller set PW=? where ID=?`,[post.PW,post.ID],
             function(error,value){
+                db.end();
                 if(error){
                     response.send("Fail");
                 }else{
@@ -283,6 +302,7 @@ exports.modifypw=function(request,response){
             dbconnect(schema,(error,{db})=>
             db.query(`update Customer set PW=? where ID=?`,[post.PW,post.ID],
             function(error,value){         
+                db.end();
                 if(error){
                     response.send("Fail");
                 }else{

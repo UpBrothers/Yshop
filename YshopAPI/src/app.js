@@ -17,7 +17,7 @@ app.post('/modifypw',(request,response)=>common.modifypw(request,response));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get('/customer/storeinfo',(request,response)=>customer.storeinfo(request,response));
-app.get('/customer/categoryinfo',(request,response)=>customer.categoryinfo(request,response));
+//app.get('/customer/categoryinfo',(request,response)=>customer.categoryinfo(request,response));
 app.get('/customer/showproductlist',(request,response)=>customer.showproductlist(request,response));
 app.get('/customer/productinfo',(request,response)=>customer.productinfo(request,response));
 

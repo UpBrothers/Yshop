@@ -1,38 +1,51 @@
 const dbconnect= require('./dbcon');
 
 exports.storeinfo=function(request,response){
-    var schema='Y#';
-    dbconnect(schema,(error,{db})=>
-    db.query(`SELECT shopName, shopEmail, businessNo,shopPhone,shopAddress FROM Seller where URL=?`,[request.query.URL],
-        function(error,value){         
-            if(error){
-                    response.send("Fail");
-            }else{
-                    response.send(value);
-            }
-        })
-    );       
-};
-exports.categoryinfo=function(request,response){
-
     var schema=request.query.schema;
-    dbconnect(schema,(error,{db})=>
-    db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.order`,
-        function(error,value){         
-            if(error){
-                    response.send("Fail");
-            }else{
-                    response.send(value);
-            }
+    dbconnect('Y#',(error,{db})=>
+    db.query(`SELECT name,shopName, shopEmail, image, businessNo,shopPhone,shopAddress,description FROM Seller where URL=?`,[request.query.URL],
+        function(error,value1){         
+            db.end();
+            dbconnect(schema,(error,{db})=>
+            db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.navOrder`,
+                function(error,value2){     
+                    result={
+                        storeinfo : value1,
+                        categoryinfo : value2
+                    }    
+                    db.end();
+                    if(error){
+                        response.send("Fail");
+                    }else{
+                            response.send(result);
+                    }
+                })
+            );   
         })
     );       
 };
+
+// exports.categoryinfo=function(request,response){
+
+//     var schema=request.query.schema;
+//     dbconnect(schema,(error,{db})=>
+//     db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.order`,
+//         function(error,value){         
+//             if(error){
+//                     response.send("Fail");
+//             }else{
+//                     response.send(value);
+//             }
+//         })
+//     );       
+// };
 exports.showproductlist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
     db.query(`SELECT * FROM Product_Info_View`,
-        function(error,value){         
+        function(error,value){    
+            db.end();     
             if(error){
                     response.send("Fail");
             }else{
@@ -62,6 +75,7 @@ exports.productinfo=function(request,response){
                 Review : value[2],
                 QnA : value[3]
             }
+            db.end();
             if(error){
                     response.send("Fail");
             }else{

@@ -9,6 +9,7 @@ exports.productlist=function(request,response){
     where Product_Group_View.productPK=Product_Info_View.productPK and Product_Info_View.status <> '-1'`,
     [request.query.URL],
         function(error,value){         
+            db.end();
             if(error){
                     response.send("Fail");
             }else{
@@ -35,6 +36,7 @@ exports.productinfo=function(request,response){
                 Option : value[1],
                 Product_Group_View : value[2],
             }
+            db.end();
             if(error){
                     response.send("Fail");
             }else{
@@ -78,7 +80,8 @@ exports.addproduct=function(request,response){
             db.query(sql2[0],[productpk,post.optionstock[i].option[0],null,null,post.optionstock[i].stock,post.optionstock[i].extraCharge],
                 function(error,value){
                     if(error){
-                            response.send("Fail");
+                        db.end();
+                        response.send("Fail");
                     }
                 })
             );  
@@ -91,7 +94,8 @@ exports.addproduct=function(request,response){
             db.query(sql2[0],[productpk,post.optionstock[i].option[0],post.optionstock[i].option[1],null,post.optionstock[i].stock,post.optionstock[i].extraCharge],
                 function(error,value){
                     if(error){
-                            response.send("Fail");
+                        db.end();
+                        response.send("Fail");
                     }
                 })
             );  
@@ -104,7 +108,8 @@ exports.addproduct=function(request,response){
             db.query(sql2[0],[productpk,post.optionstock[i].option[0],post.optionstock[i].option[1],post.optionstock[i].option[2],post.optionstock[i].stock,post.optionstock[i].extraCharge],
                 function(error,value){
                     if(error){
-                            response.send("Fail");
+                        db.end();
+                        response.send("Fail");
                     }
                 })
             );  
@@ -117,8 +122,8 @@ exports.addproduct=function(request,response){
                 dbconnect(schema,(error,{db})=>
                 db.query(sql2[1],[productpk,post.list[0]],
                     function(error,value){
+                        db.end();
                         if(error){
-                            console.log(error)
                             response.send("Fail");
                         }else{
                             response.send("Success");
@@ -161,6 +166,7 @@ exports.addproduct=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(sql,key[0],
                         function(error,value){
+                            db.end();
                             if(error){
                                     response.send("Fail");
                             }else{
@@ -201,8 +207,9 @@ exports.addproduct=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(sql,key[4],
                         function(error,value){  
+                            db.end();
                             if(error){
-                                    response.send("Fail");
+                                response.send("Fail");
                             }else{
                                 response.send("Success");
                             }
@@ -241,8 +248,9 @@ exports.addproduct=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(sql,key[8],
                         function(error,value){  
+                            db.end();
                             if(error){
-                                    response.send("Fail");
+                                response.send("Fail");
                             }else{
                                 response.send("Success");
                             }
@@ -262,7 +270,6 @@ exports.addproduct=function(request,response){
                     db.query(sql,key[10],
                         function(error,value){  
                             insertoption2(value.insertId)
-
                             })
                         );   
                     break;
@@ -284,7 +291,8 @@ exports.removeproduct=function(request,response){
     var schema=post.schema;
     dbconnect(schema,(error,{db})=>
     db.query(`update Product set status='-1'where productPK=?`,[post.productPK],
-        function(error,value){         
+        function(error,value){     
+            db.end();    
             if(error){
                 response.send("Fail");
             }else{
@@ -298,7 +306,8 @@ exports.categorylist=function(request,response){
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
     db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.order`,
-        function(error,value){         
+        function(error,value){      
+            db.end();   
             if(error){
                     response.send("Fail");
             }else{
@@ -316,11 +325,12 @@ exports.addcategory=function(request,response){
         case 1:
             dbconnect(schema,(error,{db})=>
             db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'1','0')`,[post.list[0]],
-               function(error,value){         
+               function(error,value){   
+                db.end();      
                     if(error){
-                            response.send("Fail");
+                        response.send("Fail");
                     }else{
-                            response.send("Success");
+                        response.send("Success");
                     }
                 })
            ); 
@@ -328,17 +338,19 @@ exports.addcategory=function(request,response){
         case 2:
             dbconnect(schema,(erro1,{db})=>
             db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'1','0')`,[post.list[0]],
-               function(error1,value1){         
+               function(error1,value1){       
+                db.end();  
                 dbconnect(schema,(error2,{db})=>
                 db.query(`SELECT groupPK FROM `+schema+`.Group where groupName=?`,[post.list[0]],
                    function(error2,value2){   
+                    db.end();
                         dbconnect(schema,(error4,{db})=>
                         db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'2',?)`,[post.list[1],value2[0].groupPK],
-                            function(error4,value4){         
+                            function(error4,value4){   
+                                db.end();      
                                 if(error4){
                                         response.send("Fail");
                                 }else{
-                                    console.log("success")
                                         response.send("Success");
                                 }
                             })
@@ -351,22 +363,29 @@ exports.addcategory=function(request,response){
         case 3:
             dbconnect(schema,(erro1,{db})=>
             db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'1','0')`,[post.list[0]],
-               function(error1,value1){         
+               function(error1,value1){    
+                db.end();     
                 dbconnect(schema,(error2,{db})=>
                 db.query(`SELECT groupPK FROM `+schema+`.Group where groupName=?`,[post.list[0]],
                    function(error2,value2){   
+                    db.end();
                         dbconnect(schema,(error4,{db})=>
                         db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'2',?)`,[post.list[1],value2[0].groupPK],
-                            function(error4,value4){         
+                            function(error4,value4){     
+                                db.end();    
                                 dbconnect(schema,(error5,{db})=>
                                 db.query(`SELECT groupPK FROM `+schema+`.Group where parent = (select groupPK from shop_template.Group where groupName=?)`,[post.list[0]],
                                    function(error5,value5){   
+                                    db.end();
                                         dbconnect(schema,(error6,{db})=>
                                         db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'3',?)`,[post.list[2],value5[0].groupPK],
-                                            function(error6,value6){         
+                                            function(error6,value6){    
+                                                db.end();     
                                                 if(error6){
+                                                    db.end();
                                                         response.send("Fail");
                                                 }else{
+                                                    db.end();
                                                         response.send("Success");
                                                 }
                                             })
@@ -388,7 +407,8 @@ exports.removecategory=function(request,response){
     var schema=post.schema;
     dbconnect(schema,(error,{db})=>
     db.query(`delete from `+schema+`.Group where groupName=?`,[post.list[0]],
-        function(error,value){         
+        function(error,value){     
+            db.end();    
             if(error){
                 response.send("Fail");
             }else{
@@ -402,11 +422,12 @@ exports.benefitslist=function(request,response){
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
     db.query(`SELECT * FROM Discount`,
-        function(error,value){         
+        function(error,value){        
+            db.end(); 
             if(error){
-                    response.send("Fail");
+                response.send("Fail");
             }else{
-                    response.send(value);
+                response.send(value);
             }
         })
     );       
@@ -422,7 +443,8 @@ exports.addbenefits=function(request,response){
             console.log(post.flag)
             dbconnect(schema,(error,{db})=>
             db.query(`insert into Discount(discountName, flag, target1, dcRate, startDate, endDate) values(?,?,?,?,?,?)`,[post.discountName,post.flag,post.target1,post.dcRate,post.startDate,post.endDate],
-                function(error,value){         
+                function(error,value){  
+                    db.end();       
                     if(error){
                         response.send("Fail");
                     }else{
@@ -434,7 +456,8 @@ exports.addbenefits=function(request,response){
         case '2':
             dbconnect(schema,(error,{db})=>
             db.query(`insert into Discount(discountName, flag, target2, dcRate, startDate, endDate) values(?,?,?,?,?,?)`,[post.discountName,post.flag,post.target2,post.dcRate,post.startDate,post.endDate],
-                function(error,value){         
+                function(error,value){   
+                    db.end();      
                     if(error){
                         response.send("Fail");
                     }else{
@@ -451,7 +474,8 @@ exports.removebenefits=function(request,response){
     var schema=post.schema;
     dbconnect(schema,(error,{db})=>
     db.query(`delete from Discount where discountPK=?`,[post.discountPK],
-        function(error,value){         
+        function(error,value){  
+            db.end();       
             if(error){
                 response.send("Fail");
             }else{
