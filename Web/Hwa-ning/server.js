@@ -53,7 +53,7 @@ app.get('/customer/:shopURL', function (req, res) {
                 shopPhone: storeInfo.storeinfo[0].shopPhone,
                 shopAddress: storeInfo.storeinfo[0].shopAddress,
                 description: storeInfo.storeinfo[0].description,
-                name: "밍기",
+                shopCEO: storeInfo.storeinfo[0].name,
                 category: storeInfo.categoryinfo,
                 productList: product,
                 indexURL: idxURL
@@ -65,14 +65,59 @@ app.get('/customer/:shopURL', function (req, res) {
 app.get('/customer/:shopURL/product/:productPK', function (req, res) {
     // 상품 상세보기 수정중
     console.log(req.params.shopURL);
+    console.log(req.params.productPK)
     GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeInfo }) => {
         if (error)
             return res.send({ error });
-        GetProductInfo("shop_template", req.params.productPK, (error, { ProductList }) => {
+        GetProductInfo("shop_template", req.params.productPK, (error, { ProductInfo }) => {
             if (error)
                 return res.send({ error });
 
-            var idxURL = (req.params.shopURL).toString();
+            let idxURL = (req.params.shopURL).toString();
+            if (ProductInfo == null)
+                return res.render('error.ejs');
+            let product = {
+                productPK: ProductInfo.Product_Info_View[0].productPK,
+                pname: ProductInfo.Product_Info_View[0].name,
+                price: ProductInfo.Product_Info_View[0].price,
+                status: ProductInfo.Product_Info_View[0].status,
+                views: ProductInfo.Product_Info_View[0].views,
+                thumbnail: ProductInfo.Product_Info_View[0].thumbnail,
+                regDate: ProductInfo.Product_Info_View[0].registrationDate,
+                star: ProductInfo.Product_Info_View[0].star,
+                revCount: ProductInfo.Product_Info_View[0].count,
+                likeCount: ProductInfo.Product_Info_View[0].likecount,
+                stock: ProductInfo.Product_Info_View[0].stock,
+                dcRate: ProductInfo.Product_Info_View[0].dcRate,
+                image: []
+            };
+            if (ProductInfo.Product_Info_View[0].image1 != null) {
+                product.image[0] = ProductInfo.Product_Info_View[0].image1;
+                if (ProductInfo.Product_Info_View[0].image2 != null) {
+                    product.image[1] = ProductInfo.Product_Info_View[0].image2;
+                    if (ProductInfo.Product_Info_View[0].image3 != null) {
+                        product.image[2] = ProductInfo.Product_Info_View[0].image3;
+                    }
+                }
+            }
+            let options = {
+                stockPK: [],
+                option1: [],
+                option2: [],
+                option3: [],
+                stock: [],
+                extracharge: []
+            };
+            for (let i = 0; i < ProductInfo.Option.length; i++) {
+                options.stockPK[i] = ProductInfo.Option[i].stockPK;
+                options.option1[i] = ProductInfo.Option[i].option1PK;
+                options.option2[i] = ProductInfo.Option[i].option2PK;
+                options.option3[i] = ProductInfo.Option[i].option3PK;
+                options.stock[i] = ProductInfo.Option[i].stock;
+                options.extracharge[i] = ProductInfo.Option[i].extraCharge;
+            }
+            console.log(product);
+            console.log(options);
             return res.render('product.ejs', {
                 shopName: storeInfo.storeinfo[0].shopName,
                 shopEmail: storeInfo.storeinfo[0].shopEmail,
@@ -80,9 +125,9 @@ app.get('/customer/:shopURL/product/:productPK', function (req, res) {
                 shopPhone: storeInfo.storeinfo[0].shopPhone,
                 shopAddress: storeInfo.storeinfo[0].shopAddress,
                 description: storeInfo.storeinfo[0].description,
-                name: "밍기",
-                category: storeInfo.categoryinfo,
-                productList: product,
+                shopCEO: storeInfo.storeinfo[0].name,
+                productInfo: product,
+                optionInfo: options,
                 indexURL: idxURL
             });
         })
