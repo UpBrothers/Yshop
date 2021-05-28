@@ -305,7 +305,18 @@ exports.categorylist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
-    db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.order`,
+    db.query(`select * from (
+        select g1.groupPK groupPk1, g1.groupName groupName1, null as groupPK2, null as groupName2, null as groupPK3, null as groupName3
+        from shop_template.Group g1
+        where g1.groupPK and depth=1
+        union
+        select g1.groupPK groupPk1, g1.groupName groupName1,g2.groupPK groupPK2 ,g2.groupName groupName2, null as groupPK3, null as groupName3
+        from shop_template.Group g1,shop_template.Group g2
+        where g1.groupPK=g2.parent and g2.depth=2
+        union
+        select g1.groupPK groupPk1, g1.groupName groupName1,g2.groupPK groupPK2,g2.groupName groupName2,g3.groupPK groupPK3,g3.groupName groupName3
+        from shop_template.Group g1, shop_template.Group g2, shop_template.Group g3
+        where g1.groupPK=g2.parent and g2.groupPK=g3.parent and g3.depth=3) t order by t.groupPK1;`,
         function(error,value){      
             db.end();   
             if(error){

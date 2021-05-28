@@ -58,7 +58,9 @@ exports.productinfo=function(request,response){
 
     var schema=request.query.schema;
     var sql = [
-        `SELECT * FROM Product_Info_View where productPK=?;`,
+        `select pv.productPK, pv.name, pv.price, pv.status, pv.views, pv.thumbnail, image1, image2, image3,
+        pv.registrationDate, pv.star, pv.count, pv.likecount, pv.stock, pv.dcRate
+        from Product_Info_View pv, Product p  where pv.productPK=p.productPK and pv.productPK=?;`,
         `SELECT * FROM Stock where productPK=?;`,
         `select r.purchasePK,p.ID, r.title, r.context, r.image, r.star, r.registrationDate from Review r, PurchaseDetail p
         where p.purchasePK=r.purchasePK and r.purchasePK in (SELECT stockPK FROM Stock s where s.productPK=?);`,

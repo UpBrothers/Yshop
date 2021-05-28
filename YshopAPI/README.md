@@ -209,8 +209,11 @@
 
 |변수명|설명|
 |------|---|
+|groupPK1|그룹 대분류 이름
 |gorupName1|그룹 대분류 이름
+|groupPK2|그룹 중분류 이름
 |gorupName2|그룹 중분류 이름
+|groupPK3|그룹 소분류 이름
 |gorupName3|그룹 소분류 이름
 
 # 9. AddCategory (카테고리 등록) - 판매자
@@ -352,6 +355,9 @@
 |||status|판매 상태
 |||views|조회 수
 |||thumbnail|상품 썸네일
+|||image1|상품 본문 이미지 1
+|||image2|상품 본문 이미지 2
+|||image3|상품 본문 이미지 3
 |||registrationDate|상품 등록일
 |||star|상품 평균 별점
 |||count|상품 후기 수
