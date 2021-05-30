@@ -4,10 +4,8 @@
 <!--공통네비바 상단-->
 <nav class="topnavbar navbar navbar-expand-lg navbar-light" style="overflow:hidden;">
     <div class="container-fluid">
-        <a class="navbar-brand" id = "white" href="http://www.google.co.kr">
-            <img src="" alt="" width="80" height="24" class="d-inline-block align-text-top">
-            Logo
-            <!--일단 구글 박아둠-->
+        <a class="navbar-brand" id = "white" href="http://localhost:3000/customer/<%= indexURL %>">
+            <img src="https://yshop-image.s3.ap-northeast-2.amazonaws.com/tes.png" alt="" width="60" height="30" class="d-inline-block align-text-top">
         </a>  
         <a class="login" id="white" href = "#">로그인</a>
     </div>
@@ -15,16 +13,16 @@
 <!--공통네비바 하단-->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" id = "white" href="http://www.naver.com">
-            <img src="" alt="" width="30" height="30" class="d-inline-block align-text-top">
-            <%= description %>
+        <a class="navbar-brand" id = "white" href="http://localhost:3000/customer/<%= indexURL %>">
+            <img src="<%= storeInfo.shopImage %>" style="border-radius:50%;" width="30" height="30" class="d-inline-block align-text-top">
+            <%= storeInfo.description %>
             <!--일단 구글 박아둠-->
         </a>
         <form class="d-flex">
             <div class = "search">
                 <ul>
                     <li><input class="form-control me-2" type="text" placeholder = "검색어를 입력해보세요"></li>
-                    <li><button class="btn" type="submit" ><img src="" alt="" width = "20px" height = "20px"></button></li>
+                    <li><button class="btn" type="submit" ><img src="https://yshop-image.s3.ap-northeast-2.amazonaws.com/clolse.png" width = "20px" height = "20px"></button></li>
                 </ul>
             </div>
         </form>
@@ -33,7 +31,7 @@
 </nav>
 <!--가게네비바 상단-->
 <div class="mallNavTop">
-<a id = "title" href ="http://localhost:3000/customer/<%= indexURL %> "> <%= shopName %></a>
+<a id = "title" href ="http://localhost:3000/customer/<%= indexURL %> "> <%= storeInfo.shopName %></a>
 </div>
 
 <!--가게네비바 하단(카테고리 선택하는 부분)-->
@@ -45,23 +43,34 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Category1</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Category2</a>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-        </li>
+            <% for(let i=0;i<categoryInfo.length;i++) { %>
+            <% let tempSplit = categoryInfo[i].split('@');%>
+            <% let checkIdx = tempSplit[0]; %>
+            <% let j=i; %>
+            <% for(;j<categoryInfo.length;j++){
+                let temp = categoryInfo[j].split('@');
+                if(temp[0] != checkIdx)
+                    break;
+            } %>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <%= checkIdx %>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <% checkIdx == ""; 
+                for(let k=i+1;k<j;k++) {
+                    tempSplit = categoryInfo[k].split('@');
+                    console.log(tempSplit);
+                    if(checkIdx == tempSplit[1])
+                        break;
+                    checkIdx = tempSplit[1];
+                %>
+                    <li><a class="dropdown-item" href="#"><%= checkIdx %></a></li>
+                <% } %>
+                </ul>
+            </li>
+            <% i+= j-1;
+            } %>
         </ul>
     </div>
 </div>
