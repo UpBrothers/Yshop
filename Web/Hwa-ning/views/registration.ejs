@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<title>Y# <%= storeInfo.shopName %> 로그인</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="/css/reg.css" />
+</head>
+<body>
+	<header>
+		<%- include('navbar.ejs')%>
+	</header>
+	<div class = "box">
+		<img src="https://yshop-image.s3.ap-northeast-2.amazonaws.com/tes.png">
+		<br>
+		<br>
+		<br>
+		<br>
+		<section>
+			<form method="post" action="/customer/<%=indexURL%>/reg_process">
+				<table style="margin-left:auto;margin-right:auto;">
+					<tr>
+						<td><input style="background-color: white" type="text" name="id" value="" placeholder="아이디"></td>
+						<td><input type="submit" value="아이디 중복 확인" formaction="../util/customer_check_process.js"></td>
+					</tr>
+					<tr>
+						<td><input style="background-color: white" type="password" name="pw" value="" placeholder="비밀번호"></td>
+					</tr>
+					<tr>
+						<td><input style="background-color: white" type="text" name="uname" value="" placeholder="이름"></td>
+					</tr>
+					<tr>
+						<td><input style="background-color: white" type="text" name="phone" value="" placeholder="전화번호"></td>
+					</tr>
+					<tr>
+						<td><input style="background-color: white" type="email" name="email" value="" placeholder="이메일"></td>
+					</tr>
+					<tr>
+						<td><input style="background-color: white" type="text" name="birthdate" value="" placeholder="생년월일"></td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="gender" value="1">남성&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="0">여성</td>
+					</tr>
+					<tr>
+						<td><input style="background-color: white" type="text" name="address" value="" placeholder="주소"></td>
+					</tr>
+					<tr>
+						<td><input style="width:100%;background-color:mediumslateblue; color:white" type="submit" value="회원가입"></td>
+					</tr>
+				</table>
+			</form>
+			<br>
+		</section>
+	</div>
+	<footer>
+		<%- include ('footer') %>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+a,
+li,
+ul {
+  color: black;
+  text-decoration: none;
+  text-align: center;
+}
+h1 {
+  text-align: center;
+}
+.box {
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  height: 700px;
+  text-align: center;
+  border-radius: 6px;
+}
+.box input {
+  width: 300px;
+  height: 50px;
+}
+
+.box input[type="radio"] {
+  width: auto;
+  height: auto;
+}

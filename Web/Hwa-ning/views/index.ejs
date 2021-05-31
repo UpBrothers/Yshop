@@ -14,8 +14,8 @@
         <%- include ('navbar') %>
     </header>
     <section>
-        <h1 class="center productList">전체 상품</h1>
-        <div style="text-align: center;">
+        <h1  class="center productList">전체 상품</h1>
+        <div style="text-align:center;">
             <table id = "productListTab" style="margin-left: auto;margin-right:auto">
                 <% for(let i=0;i<productList.productPK.length;i++){ %>
                     <% if(i%4==0) {%>
@@ -23,11 +23,11 @@
                     <% } %>
                         <td>
                             <%
-                            let temp = "http://localhost:3000/customer/";
+                            let temp = "/customer/";
                             temp += indexURL + "/product/";
                             temp += productList.productPK[i];
                             %>
-                            <div style="border:solid black 1px">
+                            <div>
                             <a href = <%= temp %> ><img src = "<%= productList.thumbnail[i] %>" style = "width:300px;height:300px;object-fit: contain;"></a>
                             <a href = <%= temp %> ><p style="text-align:center; font-size:24px">
                                 <%= productList.name[i] %>
