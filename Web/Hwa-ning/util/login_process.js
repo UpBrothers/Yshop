@@ -14,7 +14,7 @@ const Login_process = (schema, ID, PW, callback) => {
     };
     console.log("login_proces : " + obj);
     request(obj, (error, { body }) => {
-        const id = body
+        const id = body;
         callback(undefined, {
             id
         })

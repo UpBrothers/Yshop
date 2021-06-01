@@ -9,7 +9,7 @@ a {
   text-decoration: none;
 }
 .navbar-light {
-  background: navy;
+  background: mediumslateblue;
 }
 .container-fluid {
   margin-left: 300px;
@@ -55,10 +55,6 @@ a {
 }
 .center {
   text-align: center;
-}
-.productList {
-  margin-top: 100px;
-  margin-bottom: 100px;
 }
 td div {
   margin-left: 10px;

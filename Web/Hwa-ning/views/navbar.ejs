@@ -5,13 +5,14 @@
 <nav class="topnavbar navbar navbar-expand-lg navbar-light" style="overflow:hidden;">
     <div class="container-fluid">
         <a class="navbar-brand" id = "white" href="/customer/<%=indexURL%>">
-            <img src="https://yshop-image.s3.ap-northeast-2.amazonaws.com/tes.png" style="border-radius: 40%;" width="50" height="30">
+            <img src="https://yshop-image.s3.ap-northeast-2.amazonaws.com/tes.png" style="border-radius: 40%;" width="50" height="35">
         </a>
+        <span style="color:white;">
         <% if (loginInfo===undefined) { %>
         <a class="login white" href = "http://localhost:3000/customer/<%=indexURL%>/login">로그인</a>
         <% }else{ %>
-        <span style="color:white;"><%= loginInfo%>님 환영합니다!</span>
-        <a class="login white" href="/customer/<%=indexURL%>/logout_process">로그아웃</a>
+        <%= loginInfo%>님 환영합니다!
+        <a class="login white" href="/customer/<%=indexURL%>/logout_process">로그아웃</a></span>
         <% } %>
     </div>
 </nav>
@@ -19,7 +20,7 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <a style="color:white" class="navbar-brand white" href="http://localhost:3000/customer/<%=indexURL%>">
-            <img src="<%= storeInfo.shopImage %>" style="border-radius:50%;" width="30" height="30" class="d-inline-block align-text-top">
+            <img src="<%= storeInfo.image %>" style="border-radius:50%;" width="30" height="30" class="d-inline-block align-text-top">
             <%= storeInfo.description %>
             <!--일단 구글 박아둠-->
         </a>
@@ -65,7 +66,6 @@
                 <% checkIdx == ""; 
                 for(let k=i+1;k<j;k++) {
                     tempSplit = categoryInfo[k].split('@');
-                    console.log(tempSplit);
                     if(checkIdx == tempSplit[1])
                         break;
                     checkIdx = tempSplit[1];

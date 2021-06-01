@@ -10,30 +10,26 @@
 	<header>
 		<%- include('navbar.ejs')%>
 	</header>
-	<div class = "box">
+	<div id = "loginDiv">
 		<img src="https://yshop-image.s3.ap-northeast-2.amazonaws.com/tes.png">
-		<br>
-		<br>
-		<br>
-		<br>
 	<section>
 		<form method="post" action="/customer/<%=indexURL%>/login_process">
-			<table style="margin-left:auto;margin-right:auto; border:solid black 1px">
+			<table>
 				<tr>
-					<td><input style="background-color: white" type="text" name="id" value="" placeholder="아이디"></td>
+					<td><input type="text" name="id" value="" placeholder=" 아이디"></td>
 				</tr>
 				<tr>
-					<td><input style="background-color: white" type="password" name="pw" value="" placeholder="비밀번호"></td>
+					<td><input type="password" name="pw" value="" placeholder=" 비밀번호"></td>
 				</tr>
 				<tr>
-					<td><input style="width:100%;background-color:mediumslateblue; color:white" type="submit" value="로그인"></td>
+					<td><input type="submit" value="로그인"></td>
 				</tr>
 			</table>
 		</form>
 		<br>
-		<a href="signup1.html">아이디 찾기</a> | 
-		<a href="signup1.html">비밀번호 찾기</a> | 
-		<a href="/customer/<%=indexURL%>/registration">회원가입</a>
+		<a class="loginMenu" href="#">아이디 찾기</a> | 
+		<a class="loginMenu" href="#">비밀번호 찾기</a> | 
+		<a class="loginMenu" href="/customer/<%=indexURL%>/registration">회원가입</a>
 	</section>
 	</div>
 	<footer>

@@ -14,10 +14,10 @@
         <%- include ('navbar') %>
     </header>
     <section>
-        <h1  class="center productList">전체 상품</h1>
-        <div style="text-align:center;">
-            <table id = "productListTab" style="margin-left: auto;margin-right:auto">
-                <% for(let i=0;i<productList.productPK.length;i++){ %>
+        <span class = "productList">전체 상품</span>
+        <div>
+            <table id = "productListTab">
+                <% for(let i=0;i<productList.length;i++){ %>
                     <% if(i%4==0) {%>
                         <tr> 
                     <% } %>
@@ -25,18 +25,17 @@
                             <%
                             let temp = "/customer/";
                             temp += indexURL + "/product/";
-                            temp += productList.productPK[i];
+                            temp += productList[i].productPK;
                             %>
                             <div>
-                            <a href = <%= temp %> ><img src = "<%= productList.thumbnail[i] %>" style = "width:300px;height:300px;object-fit: contain;"></a>
-                            <a href = <%= temp %> ><p style="text-align:center; font-size:24px">
-                                <%= productList.name[i] %>
+                            <a href = <%= temp %> ><img src = "<%= productList[i].thumbnail%>"></a>
+                            <a href = <%= temp %> ><p class="productTitle">
+                                <%= productList[i].name %>
                             </p></a>
-                            <a href = <%= temp %> ><p style="text-align:right; margin-right:10px">
-                                <%= productList.price[i] %>원
+                            <a href = <%= temp %> ><p class="productPrice">
+                                <%= productList[i].price %>원
                             </p></a>
                             </div>
-                            <% console.log(temp) %>
                         </td>
                     <% if(i%4==3) {%>
                         </tr>

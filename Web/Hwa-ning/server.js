@@ -8,26 +8,28 @@ const GetProductList = require('./util/productList');
 const GetProductInfo = require('./util/productInfo');
 const Login_process = require('./util/login_process');
 const Reg_process = require('./util/reg_process');
+const Customer_CheckID = require('./util/customer_checkID');
+const Customer_CheckPhone = require('./util/customer_checkphone');
+const Customer_CheckEmail = require('./util/customer_checkEmail');
 
 const bodyParser = require('body-parser');
-const sessionKey = require('./session_key');
+const sessionkey = require("./session_key");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-const sessionkey = require("./session_key");
 app.use(session({
     secret: sessionkey,
     resave: false,
     saveUninitialized: true,
     store: new FileStore(),
     cookie: {
-        maxAge: 60 * 60 * 100
-    }
+        maxAge: 60 * 60 * 1000
+    },
+    rolling: true
 }))
-
 app.get('/customer/:shopURL/logout_process', function (req, res) {
     req.session.destroy();
     return res.redirect('/customer/' + req.params.shopURL);
@@ -35,69 +37,16 @@ app.get('/customer/:shopURL/logout_process', function (req, res) {
 
 app.get('/customer/:shopURL', function (req, res) {
     // 메인 페이지
-    console.log(req.params.shopURL);
-    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeInfo }) => {
-        if (error)
-            return res.send({ error });
-        GetProductList("shop_template", (error, { ProductList }) => {
+    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeinfo, category }) => {
+        GetProductList("shop_template", (error, { productlist }) => {
             if (error)
                 return res.send({ error });
-            let category = [];
-            for (let i = 0; i < storeInfo.categoryinfo.length; i++) {
-                if (storeInfo.categoryinfo[i].groupName2 == null)
-                    category.push(storeInfo.categoryinfo[i].groupName1);
-                else {
-                    if (storeInfo.categoryinfo[i].groupName3 == null)
-                        category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2);
-                    else
-                        category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2 + "@" + storeInfo.categoryinfo[i].groupName3);
-                }
-            }
-            console.log(category);
-            let product = {
-                productPK: [],
-                name: [],
-                price: [],
-                status: [],
-                views: [],
-                thumbnail: [],
-                registrationDate: [],
-                star: [],
-                count: [],
-                likecount: [],
-                stock: [],
-                dcRate: []
-            };
-            for (let i = 0; i < ProductList.length; i++) {
-                product.productPK[i] = ProductList[i].productPK;
-                product.name[i] = ProductList[i].name;
-                product.price[i] = ProductList[i].price;
-                product.status[i] = ProductList[i].status;
-                product.views[i] = ProductList[i].views;
-                product.thumbnail[i] = ProductList[i].thumbnail;
-                product.registrationDate[i] = ProductList[i].registrationDate;
-                product.star[i] = ProductList[i].star;
-                product.count[i] = ProductList[i].count;
-                product.likecount[i] = ProductList[i].likecount;
-                product.stock[i] = ProductList[i].stock;
-                product.dcRate[i] = ProductList[i].dcRate;
-            }
-            let StoreInfo = {
-                shopImage: storeInfo.storeinfo[0].image,
-                shopName: storeInfo.storeinfo[0].shopName,
-                shopEmail: storeInfo.storeinfo[0].shopEmail,
-                businessNo: storeInfo.storeinfo[0].businessNo,
-                shopPhone: storeInfo.storeinfo[0].shopPhone,
-                shopAddress: storeInfo.storeinfo[0].shopAddress,
-                description: storeInfo.storeinfo[0].description,
-                shopCEO: storeInfo.storeinfo[0].name,
-            }
+
             var idxURL = (req.params.shopURL).toString();
             return res.render('index.ejs', {
                 categoryInfo: category,
-                category: storeInfo.categoryinfo,
-                storeInfo: StoreInfo,
-                productList: product,
+                storeInfo: storeinfo,
+                productList: productlist,
                 indexURL: idxURL,
                 loginInfo: req.session.userID
             });
@@ -106,85 +55,20 @@ app.get('/customer/:shopURL', function (req, res) {
 });
 
 app.get('/customer/:shopURL/product/:productPK', function (req, res) {
-    // 상품 상세보기 수정완료
-    console.log(req.params.shopURL);
-    console.log(req.params.productPK)
-    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeInfo }) => {
-        if (error)
-            return res.send({ error });
-        GetProductInfo("shop_template", req.params.productPK, (error, { ProductInfo }) => {
+    // 상품 상세보기
+    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeinfo, category }) => {
+        GetProductInfo("shop_template", req.params.productPK, (error, { product, image, option }) => {
             if (error)
                 return res.send({ error });
 
-            let idxURL = (req.params.shopURL).toString();
-            if (ProductInfo == null)
-                return res.render('error.ejs');
-            let product = {
-                productPK: ProductInfo.Product_Info_View[0].productPK,
-                pname: ProductInfo.Product_Info_View[0].name,
-                price: ProductInfo.Product_Info_View[0].price,
-                status: ProductInfo.Product_Info_View[0].status,
-                views: ProductInfo.Product_Info_View[0].views,
-                thumbnail: ProductInfo.Product_Info_View[0].thumbnail,
-                regDate: ProductInfo.Product_Info_View[0].registrationDate,
-                star: ProductInfo.Product_Info_View[0].star,
-                revCount: ProductInfo.Product_Info_View[0].count,
-                likeCount: ProductInfo.Product_Info_View[0].likecount,
-                stock: ProductInfo.Product_Info_View[0].stock,
-                dcRate: ProductInfo.Product_Info_View[0].dcRate,
-                image: []
-            };
-            let StoreInfo = {
-                shopImage: storeInfo.storeinfo[0].image,
-                shopName: storeInfo.storeinfo[0].shopName,
-                shopEmail: storeInfo.storeinfo[0].shopEmail,
-                businessNo: storeInfo.storeinfo[0].businessNo,
-                shopPhone: storeInfo.storeinfo[0].shopPhone,
-                shopAddress: storeInfo.storeinfo[0].shopAddress,
-                description: storeInfo.storeinfo[0].description,
-                shopCEO: storeInfo.storeinfo[0].name,
-            }
-            if (ProductInfo.Product_Info_View[0].image1 != null) {
-                product.image[0] = ProductInfo.Product_Info_View[0].image1;
-                if (ProductInfo.Product_Info_View[0].image2 != null) {
-                    product.image[1] = ProductInfo.Product_Info_View[0].image2;
-                    if (ProductInfo.Product_Info_View[0].image3 != null) {
-                        product.image[2] = ProductInfo.Product_Info_View[0].image3;
-                    }
-                }
-            }
-            let options = {
-                stockPK: [],
-                option1: [],
-                option2: [],
-                option3: [],
-                stock: [],
-                extracharge: []
-            };
-            for (let i = 0; i < ProductInfo.Option.length; i++) {
-                options.stockPK[i] = ProductInfo.Option[i].stockPK;
-                options.option1[i] = ProductInfo.Option[i].option1PK;
-                options.option2[i] = ProductInfo.Option[i].option2PK;
-                options.option3[i] = ProductInfo.Option[i].option3PK;
-                options.stock[i] = ProductInfo.Option[i].stock;
-                options.extracharge[i] = ProductInfo.Option[i].extraCharge;
-            }
-            let category = [];
-            for (let i = 0; i < storeInfo.categoryinfo.length; i++) {
-                if (storeInfo.categoryinfo[i].groupName2 == null)
-                    category.push(storeInfo.categoryinfo[i].groupName1);
-                else {
-                    if (storeInfo.categoryinfo[i].groupName3 == null)
-                        category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2);
-                    else
-                        category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2 + "@" + storeInfo.categoryinfo[i].groupName3);
-                }
-            }
+            var idxURL = (req.params.shopURL).toString();
+            console.log(option);
             return res.render('product.ejs', {
                 categoryInfo: category,
-                storeInfo: StoreInfo,
+                storeInfo: storeinfo,
                 productInfo: product,
-                optionInfo: options,
+                imageInfo: image,
+                optionInfo: option,
                 indexURL: idxURL,
                 loginInfo: req.session.userID
             });
@@ -194,34 +78,13 @@ app.get('/customer/:shopURL/product/:productPK', function (req, res) {
 
 app.get('/customer/:shopURL/login', function (req, res) {
     // 로그인 페이지
-    console.log(req.params.shopURL);
-    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeInfo }) => {
+    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeinfo, category }) => {
         if (error)
             return res.send({ error });
         let idxURL = (req.params.shopURL).toString();
-        let StoreInfo = {
-            shopImage: storeInfo.storeinfo[0].image,
-            shopName: storeInfo.storeinfo[0].shopName,
-            shopEmail: storeInfo.storeinfo[0].shopEmail,
-            businessNo: storeInfo.storeinfo[0].businessNo,
-            shopPhone: storeInfo.storeinfo[0].shopPhone,
-            shopAddress: storeInfo.storeinfo[0].shopAddress,
-            description: storeInfo.storeinfo[0].description,
-            shopCEO: storeInfo.storeinfo[0].name,
-        }
-        let category = [];
-        for (let i = 0; i < storeInfo.categoryinfo.length; i++) {
-            if (storeInfo.categoryinfo[i].groupName2 == null)
-                category.push(storeInfo.categoryinfo[i].groupName1);
-            else {
-                if (storeInfo.categoryinfo[i].groupName3 == null)
-                    category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2);
-                else
-                    category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2 + "@" + storeInfo.categoryinfo[i].groupName3);
-            }
-        }
+
         return res.render('login.ejs', {
-            storeInfo: StoreInfo,
+            storeInfo: storeinfo,
             categoryInfo: category,
             indexURL: idxURL,
             loginInfo: undefined
@@ -231,34 +94,13 @@ app.get('/customer/:shopURL/login', function (req, res) {
 
 app.get('/customer/:shopURL/registration', function (req, res) {
     // 회원가입페이지
-    console.log(req.params.shopURL);
-    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeInfo }) => {
+    GetStoreInfo(req.params.shopURL, "shop_template", (error, { storeinfo, category }) => {
         if (error)
             return res.send({ error });
         let idxURL = (req.params.shopURL).toString();
-        let StoreInfo = {
-            shopImage: storeInfo.storeinfo[0].image,
-            shopName: storeInfo.storeinfo[0].shopName,
-            shopEmail: storeInfo.storeinfo[0].shopEmail,
-            businessNo: storeInfo.storeinfo[0].businessNo,
-            shopPhone: storeInfo.storeinfo[0].shopPhone,
-            shopAddress: storeInfo.storeinfo[0].shopAddress,
-            description: storeInfo.storeinfo[0].description,
-            shopCEO: storeInfo.storeinfo[0].name,
-        }
-        let category = [];
-        for (let i = 0; i < storeInfo.categoryinfo.length; i++) {
-            if (storeInfo.categoryinfo[i].groupName2 == null)
-                category.push(storeInfo.categoryinfo[i].groupName1);
-            else {
-                if (storeInfo.categoryinfo[i].groupName3 == null)
-                    category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2);
-                else
-                    category.push(storeInfo.categoryinfo[i].groupName1 + "@" + storeInfo.categoryinfo[i].groupName2 + "@" + storeInfo.categoryinfo[i].groupName3);
-            }
-        }
+
         return res.render('registration.ejs', {
-            storeInfo: StoreInfo,
+            storeInfo: storeinfo,
             categoryInfo: category,
             indexURL: idxURL,
             loginInfo: undefined
@@ -268,17 +110,17 @@ app.get('/customer/:shopURL/registration', function (req, res) {
 
 app.post('/customer/:shopURL/reg_process', function (req, res) {
     // 회원가입 요청
-    console.log(req.body);
-    Reg_process("shop_template", req.body.id, req.body.pw, req.body.uname, req.body.phone, req.body.email, req.body.birthdate, req.body.gender, req.body.address, (error, { user }) => {
-        console.log("server.js " + user);
-        if (user == "Fail") {
-            console.log("회원가입에러");
-        }
-        else if (error) {
+    let rb = req.body;
+    Reg_process("shop_template", rb.id, rb.pw, rb.uname, rb.phone, rb.email, rb.birthdate, rb.gender, rb.address, (error, { user }) => {
+        if (error) {
             return res.send({ error });
         }
-        console.log("회원가입이 완료되었습니다!");
-        return res.redirect('/customer/' + req.params.shopURL + "?loginInfo=" + `${req.session.userID}`);
+
+        if (user == "Fail")
+            console.log("회원가입실패");
+        else
+            console.log(rb.id + "회원가입");
+        return res.redirect('/customer/' + req.params.shopURL);
     })
 });
 
@@ -292,10 +134,58 @@ app.post('/customer/:shopURL/login_process', function (req, res) {
         else if (error) {
             return res.send({ error });
         }
-
         req.session.userID = id[0].ID;
-        console.log(req.session);
-        return res.redirect('/customer/' + req.params.shopURL + "?loginInfo=" + `${req.session.userID}`);
+        console.log(req.session + "로그인");
+        req.session.save(function () {
+            return res.redirect('/customer/' + req.params.shopURL);
+        });
+    })
+});
+
+app.post('/customer/:shopURL/idcheck', function (req, res) {
+    // ID 중복 확인
+    Customer_CheckID("shop_template", req.body.test, (error, { chkid }) => {
+        console.log(chkid);
+        if (error)
+            console.log("ERROR : ", error);
+        if (chkid[0].cnt == 1) {
+            console.log("사용 불가능한 ID입니다.");
+            res.send({ checkID: false });
+        }
+        else {
+            console.log("사용 가능한 ID입니다.");
+            res.send({ checkID: true });
+        }
+    })
+});
+
+app.post('/customer/:shopURL/phonecheck', function (req, res) {
+    // 전화번호 중복 확인
+    Customer_CheckPhone("shop_template", req.body.test, (error, { chkphone }) => {
+        console.log(chkphone);
+        if (error)
+            console.log("ERROR : ", error);
+        if (chkphone[0].cnt == 1) {
+            res.send({ checkPhone: false });
+        }
+        else {
+            res.send({ checkPhone: true });
+        }
+    })
+});
+
+app.post('/customer/:shopURL/emailcheck', function (req, res) {
+    // 이메일 중복 확인
+    Customer_CheckEmail("shop_template", req.body.test, (error, { chkemail }) => {
+        console.log(chkemail);
+        if (error)
+            console.log("ERROR : ", error);
+        if (chkemail[0].cnt == 1) {
+            res.send({ checkEmail: false });
+        }
+        else {
+            res.send({ checkEmail: true });
+        }
     })
 });
 

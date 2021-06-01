@@ -1,13 +1,42 @@
-td img {
-  width: inherit;
-  height: inherit;
-  object-fit: contain;
+#divSummary {
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+  border: solid darkgray 1px;
 }
+#divSummary div {
+  width: 100%;
+  height: 100%;
+}
+#divSummary table {
+  margin-left: auto;
+  margin-right: auto;
+  table-layout: fixed;
+  width: 1000px;
+}
+
+#divSummary input {
+  border: none;
+  background-color: mediumslateblue;
+  color: white;
+  margin-bottom: 10px;
+}
+
 #dcRate {
   color: saddlebrown;
   font-weight: bolder;
   text-align: center;
   font-size: 25px;
+}
+#thumbnail {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 #orginalPrice {
   text-decoration-line: line-through;
@@ -31,29 +60,11 @@ td img {
   font-weight: bolder;
   font-size: 30px;
 }
-#divSummary {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  text-align: center;
-}
-#divSummary img {
-  width: 300px;
-  height: 300px;
-}
-#divSummary button,
-input {
-  border: none;
-}
-#divSummary input {
-  border: none;
-  background-color: navy;
-  color: white;
-}
+
 .stockDelete {
   background-color: white;
 }
 #divDetail {
-  /* border:solid gray 1px; */
   margin-left: auto;
   margin-right: auto;
   width: 1000px;
@@ -62,9 +73,20 @@ input {
 #divDetail img {
   margin-top: 5px;
   margin-bottom: 5px;
-  width: inherit;
-  height: inherit;
-  max-width: 1000px;
-  max-height: 1000px;
-  object-fit: scale-down;
+  width: 1000px;
+  height: 1000px;
+  object-fit: contain;
+}
+.btnCount {
+  background-color: mediumslateblue;
+  color: white;
+  width: 20px;
+  height: auto;
+  border: 0px;
+}
+.btnDelete {
+  background-color: white;
+  width: 5px;
+  height: 5px;
+  border: 0px;
 }

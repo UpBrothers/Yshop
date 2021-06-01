@@ -18,7 +18,6 @@ const Reg_process = (schema, ID, PW, uname, phone, email, birthdate, gender, add
         },
         json: true
     };
-    console.log(regObj);
     console.log("reg_customer : " + regObj.body);
     request(regObj, (error, { body }) => {
         const user = body

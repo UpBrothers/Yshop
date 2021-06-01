@@ -12,7 +12,7 @@
         var totalPrice = 0;
         var totalCount = 0;
         let selectedItems = {
-            productPK : <%= productInfo.productPK %>,
+            productPK : <%= productInfo.productPK%>,
             stockPK : [],
             count : [],
             price : []
@@ -28,15 +28,14 @@
                 if(selectedItems.stockPK[i]==selectStockPK)
                     return true;
             }
-
             let selectedTable = document.getElementById("selected");
             let tempHTML =  `<div value ="`+ selectStockPK+`"style="width:inherit;height:70px; text-align:left;">
                             <p style="text_align:left;font-size:15px;">`+selectOptionName + `</p> 
-                            <button onclick="CalCount('m',this);">-</button>
+                            <button class="btnCount" onclick="CalCount('m',this);">-</button>
                             <span name="count" style="text-align:center; width:30px">1</span>
-                            <button onclick="CalCount('p',this);">+</button>
+                            <button class="btnCount" onclick="CalCount('p',this);">+</button>
                             <span name = "optionPrice" style = "margin-left:115px;">`+ (Number(Number(productPrice)+Number(selectExtraCharge))).toString() + `</span><span>원</span>
-                            <button onclick="DelCount(this);">×</button>
+                            <button class="btnDelete" onclick="DelCount(this);">×</button>
                             </div>`;
             selectedTable.innerHTML += tempHTML;
             let idx = selectedItems.stockPK.length;
@@ -89,7 +88,6 @@
                     delete selectedItems.price[i];
                 }
             }
-
             var $findDiv = $(ths).closest("div");
             $findDiv.remove();
             $('#totalCount').text(totalCount);
@@ -105,27 +103,25 @@
     <div id="container" style="position:relative;">
     <section>
         <div id="divSummary">
-            <table style="margin-left:auto; margin-right:auto ;table-layout: fixed;width:1000px; border:solid 1px grey;">
+            <table>
                 <tr>
                     <td>
-                        <!-- 바꿔야할부분 1. 상품이미지  -->
                         <div>
-                        <img src="<%= productInfo.thumbnail %>">
-                    </div>
+                            <img id="thumbnail" src="<%= productInfo.thumbnail %>">
+                        </div>
                     </td>
                     <td>
                         <table class="productSummary" style="table-layout: fixed; width:450px;" >
                             <th style="width:130px;"></th>
                             <th style="width:320px;"></th>
                             <tr>
-                                <!-- 바꿔야할부분 2. 상품이름  -->
-                                <td colspan="2" id="productName"><%= productInfo.pname %></td>
+                                <td colspan="2" id="productName"><%= productInfo.name %></td>
                             </tr>
                             <tr>
                                 <td colspan="2"><hr></td>
                             </tr>
                             <tr>
-                                <!-- 바꿔야할부분 3. 할인율,원가,할인가 -->
+                                <!-- 할인율,원가,할인가 -->
                                 <% if(productInfo.dcRate!=null) { %>
                                     <td id="dcRate"><%= productInfo.dcRate %>%</td>
                                     <td style="text-align: right;">
@@ -143,41 +139,35 @@
                             <tr>
                                 <td>
                                 </td>
-                                <td>
-                                    <!-- 바꿔야할부분 4. 옵션명, 옵션 pk들 넣어줘야함  -->
-                                    <select id="Sel" style="width:100%; height:30px;" onchange="selectOption(this)">
-                                        <% for(let i=0;i<optionInfo.stockPK.length;i++){ %>
-                                            <%  
+                                <td> 
+                                    <!-- 옵션 select box -->
+                                    <select id="Sel" style="width:100%; height:30px;" onchange="selectOption()">
+                                        <% for(let i=0;i<optionInfo.length; i++){ 
                                             let temp = "";
-                                            if(optionInfo.option1[i] != null) {
-                                                temp += optionInfo.option1[i];
-                                                if(optionInfo.option2[i] != null) {
-                                                    temp += "-" + optionInfo.option2[i];
-                                                    if(optionInfo.option3[i] != null){
-                                                        temp += "-" + optionInfo.option3[i];
-                                                    }
-                                                }
-                                            }
+                                            if(optionInfo[i].option1PK != null) 
+                                                temp += optionInfo[i].option1PK;
+                                                if(optionInfo[i].option2PK != null) 
+                                                    temp += "-" + optionInfo[i].option2PK;
+                                                    if(optionInfo[i].option3PK != null)
+                                                        temp += "-" + optionInfo[i].option3PK;
+                
                                             let optionName = temp;
-                                            if(optionInfo.extracharge[i] != null){
-                                                temp += " (+" + optionInfo.extracharge[i] + "원) ";  
-                                            }
-                                            if(optionInfo.stock[i] <= 50){
-                                                if(optionInfo.stock[i] == 0)
+                                            if(optionInfo[i].extraCharge != null)
+                                                temp += " (+" + optionInfo[i].extraCharge + "원) ";  
+      
+                                            if(optionInfo[i].stock <= 50)
+                                                if(optionInfo[i].stock == 0)
                                                     temp += " / 품절";
                                                 else
-                                                    temp += " / 재고 : " + optionInfo.stock[i];
-                                            }
+                                                    temp += " / 재고 : " + optionInfo[i].stock;
                                             %>
-                                            <% if(temp != ""){%>
-                                                <% if(optionInfo.stock[i] == 0){ %>
-                                                    <option value="<%= optionInfo.stockPK[i] %>" value2="<%= optionInfo.stock[i]%>" value3= "<%= optionInfo.extracharge[i]%>" value4="<%= optionName %>" selected disabled><%= temp %></option>
-                                                <% }
-                                                else { %>
-                                                    <option value="<%= optionInfo.stockPK[i] %>" value2="<%= optionInfo.stock[i]%>" value3= "<%= optionInfo.extracharge[i]%>" value4="<%= optionName %>"><%= temp %></option>
-                                                <%}%>
-                                            <%}%>
-                                        <%}%>
+                                            <% if(temp != "")
+                                                if(optionInfo[i].stock == 0){ %>
+                                                    <option value="<%= optionInfo[i].stockPK %>" value2="<%= optionInfo[i].stock%>" value3= "<%= optionInfo[i].extraCharge%>" value4="<%= optionName %>" selected disabled><%= temp %></option>
+                                                <%} else {%>
+                                                    <option value="<%= optionInfo[i].stockPK %>" value2="<%= optionInfo[i].stock%>" value3= "<%= optionInfo[i].extraCharge%>" value4="<%= optionName %>"><%= temp %></option>
+                                        <%}
+                                    }%>
                                         <option value="" selected disabled hidden>옵션 선택</option>
                                     </select>
                                 </td>
@@ -195,7 +185,7 @@
                             <tr>
                                 <td colspan="2"><hr></td>
                             </tr>
-                            <!-- 바꿔야할부분 6. 선택된 옵션들에 따라 총 수량 및 가격 합산 -->
+                            <!-- 선택된 옵션들에 따라 총 수량 및 가격 합산 -->
                             <tr>
                                 <td style="font-weight: bolder;">
                                     총 상품 금액
@@ -209,7 +199,6 @@
                                 <td colspan="2"><hr></td>
                             </tr>
                             <tr>
-                                <!-- 바꿔야할부분 6. 선택된 옵션들 구매 혹은 장바구니 API 연동 -->
                                 <form style="margin-bottom:50px;">
                                     <td>
                                         <input type="button" value="장바구니" style="width:100%; height:50px;">
@@ -224,10 +213,10 @@
             </table>
         </div>
             <table id="divDetail">
-                <% for(let i=0;i<productInfo.image.length;i++){ %>
+                <% for(let i=0;i<imageInfo.length;i++){ %>
                    <tr>
                        <td>
-                            <img src= "<%= productInfo.image[i] %>">
+                            <img src= "<%=imageInfo[i]%>">
                        </td>
                    </tr>
                 <% } %>
