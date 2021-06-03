@@ -16,7 +16,8 @@ exports.registration=function(request,response){
             function(error,value){
                 db.end();
                 if(error){
-                    response.send("Fail");
+                    console.log(error)
+                    response.send(error);
                 }else{
                     createtemplate(post.URL,(error,{value})=>{
                         if(error){
@@ -38,6 +39,7 @@ exports.registration=function(request,response){
             function(error,value){      
                 db.end();   
                 if(error){
+                    console.log(error)
                     response.send("Fail");
                 }else{
                     response.send("Success");
@@ -174,7 +176,7 @@ exports.login=function(request,response){
         case 'seller':
             schema='Y#';
             dbconnect(schema,(error,{db})=>
-            db.query(`SELECT URL FROM Seller where ID=? and PW=?`,[post.ID,post.PW],
+            db.query(`SELECT URL,ID,shopName,image FROM Seller where ID=? and PW=?`,[post.ID,post.PW],
             function(error,value){
                 db.end();
                 response.send(value);

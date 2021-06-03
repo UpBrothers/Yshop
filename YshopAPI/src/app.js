@@ -28,6 +28,7 @@ app.get('/seller/productlist',(request,response)=>seller.productlist(request,res
 app.get('/seller/productinfo',(request,response)=>seller.productinfo(request,response));
 app.post('/seller/addproduct',(request,response)=>seller.addproduct(request,response));
 
+
 app.post('/seller/removeproduct',(request,response)=>seller.removeproduct(request,response));
 app.get('/seller/categorylist',(request,response)=>seller.categorylist(request,response));
 app.post('/seller/addcategory',(request,response)=>seller.addcategory(request,response));

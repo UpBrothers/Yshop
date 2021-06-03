@@ -32,6 +32,7 @@ const createtemplate = (schema, callback) => {
       option2 varchar(45) DEFAULT NULL,
       option3 varchar(45) DEFAULT NULL,
       registrationDate datetime NOT NULL,
+      stock varchar(45) NOT NULL DEFAULT '0',
       status int NOT NULL DEFAULT '0',
       views int NOT NULL DEFAULT '0',
       PRIMARY KEY (productPK),
@@ -156,6 +157,7 @@ const createtemplate = (schema, callback) => {
       dcRate double NOT NULL,
       startDate datetime NOT NULL,
       endDate datetime NOT NULL,
+      registrationDate datetime NOT NULL,
       PRIMARY KEY (discountPK),
       UNIQUE KEY name_UNIQUE (discountName),
       KEY Discount2_idx (target2),
@@ -384,13 +386,7 @@ const createtemplate = (schema, callback) => {
                     `+ schema + `.Like
                 WHERE
                     ( `+ schema + `.Like.productPK = `+ schema + `.Product.productPK)) AS likecount,
-            (SELECT 
-                    SUM( `+ schema + `.Stock.stock)
-                FROM 
-                    `+ schema + `.Stock
-                WHERE
-                    ( `+ schema + `.Stock.productPK = `+ schema + `.Product.productPK)
-                GROUP BY `+ schema + `.Product.productPK) AS stock,
+                    `+ schema + `.Product.stock AS stock,
             d.dcRate AS dcRate
         FROM
             (( `+ schema + `.Product

@@ -7,7 +7,18 @@ exports.storeinfo=function(request,response){
         function(error,value1){         
             db.end();
             dbconnect(schema,(error,{db})=>
-            db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.navOrder`,
+            db.query(`select * from (
+                select g1.groupPK groupPK1, g1.groupName groupName1, null as groupPK2, null as groupName2, null as groupPK3, null as groupName3
+                from `+ schema + `.Group g1
+                where g1.groupPK and depth=1
+                union
+                select g1.groupPK groupPK1, g1.groupName groupName1,g2.groupPK groupPK2 ,g2.groupName groupName2, null as groupPK3, null as groupName3
+                from `+ schema + `.Group g1,`+ schema + `.Group g2
+                where g1.groupPK=g2.parent and g2.depth=2
+                union
+                select g1.groupPK groupPK1, g1.groupName groupName1,g2.groupPK groupPK2,g2.groupName groupName2,g3.groupPK groupPK3,g3.groupName groupName3
+                from `+ schema + `.Group g1, `+ schema + `.Group g2, `+ schema + `.Group g3
+                where g1.groupPK=g2.parent and g2.groupPK=g3.parent and g3.depth=3) t order by t.groupPK1;`,
                 function(error,value2){     
                     result={
                         storeinfo : value1,
@@ -17,33 +28,35 @@ exports.storeinfo=function(request,response){
                     if(error){
                         response.send("Fail");
                     }else{
-                            response.send(result);
+
+                        var json = []
+                        var postfix = '';
+                        for(let i=0;i<result.categoryinfo.length;i++){
+                            if(!json.includes(result.categoryinfo[i].groupName1)){
+                                json[result.categoryinfo[i].groupName1+postfix]=[]
+
+                                for(let j=0;j<result.categoryinfo.length;j++){
+                                    if((result.categoryinfo[j].groupName2!=null)&&(result.categoryinfo[i].groupName1==result.categoryinfo[j].groupName1)&&!json.includes(result.categoryinfo[j].groupName1)){
+                                        json[result.categoryinfo[i].groupName1+postfix][result.categoryinfo[j].groupName2+postfix]=[];
+
+                                    }
+                                }
+
+                            }
+                        }
+                        console.log(json[0])
+                        response.send(result);
                     }
                 })
             );   
         })
     );       
 };
-
-// exports.categoryinfo=function(request,response){
-
-//     var schema=request.query.schema;
-//     dbconnect(schema,(error,{db})=>
-//     db.query(`SELECT groupName1,groupName2,groupName3 FROM Group_Nav_View,`+schema+`.Group,Nav where `+schema+`.Group.groupPK=Nav.groupPK and `+schema+`.Group.groupName=Group_Nav_View.groupName1 order by Nav.order`,
-//         function(error,value){         
-//             if(error){
-//                     response.send("Fail");
-//             }else{
-//                     response.send(value);
-//             }
-//         })
-//     );       
-// };
 exports.showproductlist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
-    db.query(`SELECT * FROM Product_Info_View`,
+    db.query(`SELECT * FROM Product_Info_View where status <> '-1' and status <> '0'`,
         function(error,value){    
             db.end();     
             if(error){

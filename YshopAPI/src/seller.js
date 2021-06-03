@@ -4,13 +4,17 @@ exports.productlist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
-    db.query(`SELECT Product_Info_View.productPk, name, price,stock,status, registrationDate,groupPK1,groupName1,groupPK2,groupName2,groupPK3,groupName3  
-    FROM Product_Group_View,Product_Info_View
-    where Product_Group_View.productPK=Product_Info_View.productPK and Product_Info_View.status <> '-1'`,
-    [request.query.URL],
+    db.query(`SELECT p1.productPk, p1.name, p1.price, p1.thumbnail,p1.option1,p1.option2,p1.option3, p1.stock,p1.status, p1.registrationDate,p2.groupPK1,p2.groupName1,p2.groupPK2,p2.groupName2,p2.groupPK3,p2.groupName3 
+    from (SELECT piv.productPk, piv.name, piv.price, piv.thumbnail,p.option1,p.option2,p.option3, piv.stock,piv.status, piv.registrationDate
+        FROM Product_Info_View piv , Product p
+        where piv.productPK=p.productPK and piv.status <> '-1') as p1 left outer join 
+        (SELECT piv.productPk, piv.name, piv.price, piv.thumbnail,p.option1,p.option2,p.option3, piv.stock,piv.status, piv.registrationDate,groupPK1,groupName1,groupPK2,groupName2,groupPK3,groupName3  
+        FROM Product_Group_View,Product_Info_View piv , Product p
+        where Product_Group_View.productPK=piv.productPK and piv.productPK=p.productPK and piv.status <> '-1') as p2 on p1.productPK = p2.productPK;`,
         function(error,value){         
             db.end();
             if(error){
+                console.log(error)
                     response.send("Fail");
             }else{
                     response.send(value);
@@ -49,31 +53,91 @@ exports.addproduct=function(request,response){
 
     var post=request.body;
     var schema=post.schema;
-    var sql = `insert into Product(name,price,thumbnail,image1,image2,image3,option1,option2,option3,registrationDate,status,views) values(?,?,?,?,?,?,?,?,?,?,?,'0');`;
+    var sql = `insert into Product(name,price,thumbnail,image1,image2,image3,option1,option2,option3,registrationDate,status,views,stock) values(?,?,?,?,?,?,?,?,?,now(),?,'0',?);`;
     var imagelength=post.image.length;
     var optionlength=post.option.length;
     var key =[
-        [post.name,post.price,post.thumbnail,post.image[0],null,null,null,null,null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],null,null,post.option[0],null,null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],null,null,post.option[0],post.option[1],null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],null,null,post.option[0],post.option[1],post.option[2],post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,null,null,null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,post.option[0],null,null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,post.option[0],post.option[1],null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,post.option[0],post.option[1],post.option[2],post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],null,null,null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],post.option[0],null,null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],post.option[0],post.option[1],null,post.registration,post.status],
-        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],post.option[0],post.option[1],post.option[2],post.registration,post.status]
+        [post.name,post.price,post.thumbnail,post.image[0],null,null,null,null,null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],null,null,post.option[0],null,null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],null,null,post.option[0],post.option[1],null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],null,null,post.option[0],post.option[1],post.option[2],post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,null,null,null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,post.option[0],null,null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,post.option[0],post.option[1],null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],null,post.option[0],post.option[1],post.option[2],post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],null,null,null,post.registration,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],post.option[0],null,null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],post.option[0],post.option[1],null,post.status,post.stock],
+        [post.name,post.price,post.thumbnail,post.image[0],post.image[1],post.image[2],post.option[0],post.option[1],post.option[2],post.status,post.stock]
     ]
-    var sql2 = [
+        var sql2 = [
         `insert into Stock(productPK,option1PK,option2PK,option3PK,stock,extraCharge) values(?,?,?,?,?,?);`,
-        `insert into Belong values(?,(select distinct g1.groupPK from ` + schema + `.Group g1 where g1.groupName=?));`,
-        `insert into Belong values(?,(select distinct g2.groupPK from ` + schema + `.Group g1, ` + schema + `.Group g2
-            where g1.groupPK=g2.parent g1.groupName=? and g2.groupName=?));`,
-        `insert into Belong values(?,(select distinct g3.groupPK from ` + schema + `.Group g1, ` + schema + `.Group g2, ` + schema + `.Group g3 
-            where g1.groupPK=g2.parent and g2.groupPk=g3.parent and g1.groupName=? and g2.groupName=? and g3.groupName=?));`
+        `insert into Belong values(?,?);`,
     ]
+    // var sql2 = [
+    //     `insert into Stock(productPK,option1PK,option2PK,option3PK,stock,extraCharge) values(?,?,?,?,?,?);`,
+    //     `insert into Belong values(?,(select distinct g1.groupPK from ` + schema + `.Group g1 where g1.groupName=?));`,
+    //     `insert into Belong values(?,(select distinct g2.groupPK from ` + schema + `.Group g1, ` + schema + `.Group g2
+    //         where g1.groupPK=g2.parent g1.groupName=? and g2.groupName=?));`,
+    //     `insert into Belong values(?,(select distinct g3.groupPK from ` + schema + `.Group g1, ` + schema + `.Group g2, ` + schema + `.Group g3 
+    //         where g1.groupPK=g2.parent and g2.groupPk=g3.parent and g1.groupName=? and g2.groupName=? and g3.groupName=?));`
+    // ]
+    // var insertBelong = (productpk)=>{
+    //     switch(post.list.length){
+    //         case 1:
+    //             dbconnect(schema,(error,{db})=>
+    //             db.query(sql2[1],[productpk,post.list[0]],
+    //                 function(error,value){
+    //                     db.end();
+    //                     if(error){
+    //                         response.send("Fail");
+    //                     }else{
+    //                         response.send("Success");
+    //                     }
+    //                 })
+    //             );  
+    //             break;
+    //         case 2:
+    //             dbconnect(schema,(error,{db})=>
+    //             db.query(sql2[2],[productpk,post.list[0],post.list[1]],
+    //                 function(error,value){
+    //                     if(error){
+    //                         console.log(error)
+    //                         response.send("Fail");
+    //                     }else{
+    //                         response.send("Success");
+    //                     }
+    //                 })
+    //             );  
+    //             break;
+    //         case 3:
+    //             dbconnect(schema,(error,{db})=>
+    //             db.query(sql2[3],[productpk,post.list[0],post.list[1],post.list[2]],
+    //                 function(error,value){
+    //                     if(error){
+    //                         console.log(error)
+    //                         response.send("Fail");
+    //                     }else{
+    //                         response.send("Success");
+    //                     }
+    //                 })
+    //             );  
+    //             break;
+    //     }
+    // }
+    var insertBelong = (productpk)=>{
+        dbconnect(schema,(error,{db})=>
+        db.query(sql2[1],[productpk,post.groupPK],
+            function(error,value){
+                db.end();
+                if(error){
+                    response.send("Fail");
+                }else{
+                    response.send("Success");
+                }
+            })
+        );  
+    }
     var insertoption1 = (productpk,callback)=>{
         for(let i=0;i<post.optionstock.length;i++){
             dbconnect(schema,(error,{db})=>
@@ -116,49 +180,8 @@ exports.addproduct=function(request,response){
         } 
         insertBelong(productpk)
     }
-    var insertBelong = (productpk)=>{
-        switch(post.list.length){
-            case 1:
-                dbconnect(schema,(error,{db})=>
-                db.query(sql2[1],[productpk,post.list[0]],
-                    function(error,value){
-                        db.end();
-                        if(error){
-                            response.send("Fail");
-                        }else{
-                            response.send("Success");
-                        }
-                    })
-                );  
-                break;
-            case 2:
-                dbconnect(schema,(error,{db})=>
-                db.query(sql2[2],[productpk,post.list[0],post.list[1]],
-                    function(error,value){
-                        if(error){
-                            console.log(error)
-                            response.send("Fail");
-                        }else{
-                            response.send("Success");
-                        }
-                    })
-                );  
-                break;
-            case 3:
-                dbconnect(schema,(error,{db})=>
-                db.query(sql2[3],[productpk,post.list[0],post.list[1],post.list[2]],
-                    function(error,value){
-                        if(error){
-                            console.log(error)
-                            response.send("Fail");
-                        }else{
-                            response.send("Success");
-                        }
-                    })
-                );  
-                break;
-        }
-    }
+
+
     switch(imagelength){
         case 1:
             switch(optionlength){
@@ -166,12 +189,8 @@ exports.addproduct=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(sql,key[0],
                         function(error,value){
-                            db.end();
-                            if(error){
-                                    response.send("Fail");
-                            }else{
-                                    response.send("Success");
-                            }
+                            console.log(value)
+                            insertBelong(value.insertId)
                         })
                     );   
                     break;
@@ -207,12 +226,7 @@ exports.addproduct=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(sql,key[4],
                         function(error,value){  
-                            db.end();
-                            if(error){
-                                response.send("Fail");
-                            }else{
-                                response.send("Success");
-                            }
+                            insertBelong(value.insertId)
                         })
                     );   
                     break;
@@ -248,12 +262,7 @@ exports.addproduct=function(request,response){
                     dbconnect(schema,(error,{db})=>
                     db.query(sql,key[8],
                         function(error,value){  
-                            db.end();
-                            if(error){
-                                response.send("Fail");
-                            }else{
-                                response.send("Success");
-                            }
+                            insertBelong(value.insertId)
                         })
                     );   
                     break;
@@ -304,19 +313,22 @@ exports.removeproduct=function(request,response){
 exports.categorylist=function(request,response){
 
     var schema=request.query.schema;
-    dbconnect(schema,(error,{db})=>
-    db.query(`select * from (
-        select g1.groupPK groupPk1, g1.groupName groupName1, null as groupPK2, null as groupName2, null as groupPK3, null as groupName3
-        from shop_template.Group g1
+
+    var sql = [`select * from (
+        select g1.groupPK groupPK1, g1.groupName groupName1, null as groupPK2, null as groupName2, null as groupPK3, null as groupName3
+        from `+ schema + `.Group g1
         where g1.groupPK and depth=1
         union
-        select g1.groupPK groupPk1, g1.groupName groupName1,g2.groupPK groupPK2 ,g2.groupName groupName2, null as groupPK3, null as groupName3
-        from shop_template.Group g1,shop_template.Group g2
+        select g1.groupPK groupPK1, g1.groupName groupName1,g2.groupPK groupPK2 ,g2.groupName groupName2, null as groupPK3, null as groupName3
+        from `+ schema + `.Group g1,`+ schema + `.Group g2
         where g1.groupPK=g2.parent and g2.depth=2
         union
-        select g1.groupPK groupPk1, g1.groupName groupName1,g2.groupPK groupPK2,g2.groupName groupName2,g3.groupPK groupPK3,g3.groupName groupName3
-        from shop_template.Group g1, shop_template.Group g2, shop_template.Group g3
-        where g1.groupPK=g2.parent and g2.groupPK=g3.parent and g3.depth=3) t order by t.groupPK1;`,
+        select g1.groupPK groupPK1, g1.groupName groupName1,g2.groupPK groupPK2,g2.groupName groupName2,g3.groupPK groupPK3,g3.groupName groupName3
+        from `+ schema + `.Group g1, `+ schema + `.Group g2, `+ schema + `.Group g3
+        where g1.groupPK=g2.parent and g2.groupPK=g3.parent and g3.depth=3) t order by t.groupPK1;`
+    ]
+    dbconnect(schema,(error,{db})=>
+    db.query(sql[0],
         function(error,value){      
             db.end();   
             if(error){
@@ -331,12 +343,11 @@ exports.addcategory=function(request,response){
 
     var post=request.body;
     var schema=post.schema;
-    var length=post.list.length;
-    switch(length){
-        case 1:
-            dbconnect(schema,(error,{db})=>
-            db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'1','0')`,[post.list[0]],
-               function(error,value){   
+
+
+    dbconnect(schema,(error,{db})=>
+        db.query(`insert into `+schema+`.Group(groupName, depth, parent) value(?,?,?)`,[post.groupName,post.depth,post.parent],
+            function(error,value){   
                 db.end();      
                     if(error){
                         response.send("Fail");
@@ -344,80 +355,14 @@ exports.addcategory=function(request,response){
                         response.send("Success");
                     }
                 })
-           ); 
-            break;
-        case 2:
-            dbconnect(schema,(erro1,{db})=>
-            db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'1','0')`,[post.list[0]],
-               function(error1,value1){       
-                db.end();  
-                dbconnect(schema,(error2,{db})=>
-                db.query(`SELECT groupPK FROM `+schema+`.Group where groupName=?`,[post.list[0]],
-                   function(error2,value2){   
-                    db.end();
-                        dbconnect(schema,(error4,{db})=>
-                        db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'2',?)`,[post.list[1],value2[0].groupPK],
-                            function(error4,value4){   
-                                db.end();      
-                                if(error4){
-                                        response.send("Fail");
-                                }else{
-                                        response.send("Success");
-                                }
-                            })
-                        );
-                    })
-                 );
-                })
-           );
-            break;
-        case 3:
-            dbconnect(schema,(erro1,{db})=>
-            db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'1','0')`,[post.list[0]],
-               function(error1,value1){    
-                db.end();     
-                dbconnect(schema,(error2,{db})=>
-                db.query(`SELECT groupPK FROM `+schema+`.Group where groupName=?`,[post.list[0]],
-                   function(error2,value2){   
-                    db.end();
-                        dbconnect(schema,(error4,{db})=>
-                        db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'2',?)`,[post.list[1],value2[0].groupPK],
-                            function(error4,value4){     
-                                db.end();    
-                                dbconnect(schema,(error5,{db})=>
-                                db.query(`SELECT groupPK FROM `+schema+`.Group where parent = (select groupPK from shop_template.Group where groupName=?)`,[post.list[0]],
-                                   function(error5,value5){   
-                                    db.end();
-                                        dbconnect(schema,(error6,{db})=>
-                                        db.query(`insert into `+schema+`.Group(groupName,depth, parent) value(?,'3',?)`,[post.list[2],value5[0].groupPK],
-                                            function(error6,value6){    
-                                                db.end();     
-                                                if(error6){
-                                                    db.end();
-                                                        response.send("Fail");
-                                                }else{
-                                                    db.end();
-                                                        response.send("Success");
-                                                }
-                                            })
-                                        );
-                                    })
-                                 );
-                            })
-                        );
-                    })
-                 );
-                })
-           );
-            break;
-    }     
+    ); 
 };
 exports.removecategory=function(request,response){
 
     var post=request.body;
     var schema=post.schema;
     dbconnect(schema,(error,{db})=>
-    db.query(`delete from `+schema+`.Group where groupName=?`,[post.list[0]],
+    db.query(`delete from `+schema+`.Group where groupPK=?`,[post.groupPK],
         function(error,value){     
             db.end();    
             if(error){
@@ -432,7 +377,8 @@ exports.benefitslist=function(request,response){
 
     var schema=request.query.schema;
     dbconnect(schema,(error,{db})=>
-    db.query(`SELECT * FROM Discount`,
+    db.query(`SELECT discountPK,discountName, flag,target1,target2, if(flag = 1, (select groupName from `+ schema + `.Group g where g.groupPK=d.target1),(select p.name from Product p where p.productPK=d.target2)) resultname,
+    dcRate,startDate,endDate,registrationDate FROM Discount d`,
         function(error,value){        
             db.end(); 
             if(error){
@@ -447,13 +393,11 @@ exports.addbenefits=function(request,response){
 
     var post=request.body;
     var schema=post.schema;
-    console.log(post.flag)
 
     switch(post.flag){
         case '1':
-            console.log(post.flag)
             dbconnect(schema,(error,{db})=>
-            db.query(`insert into Discount(discountName, flag, target1, dcRate, startDate, endDate) values(?,?,?,?,?,?)`,[post.discountName,post.flag,post.target1,post.dcRate,post.startDate,post.endDate],
+            db.query(`insert into Discount(discountName, flag, target1, dcRate, startDate, endDate,registrationDate) values(?,?,?,?,?,?,now())`,[post.discountName,post.flag,post.target1,post.dcRate,post.startDate,post.endDate],
                 function(error,value){  
                     db.end();       
                     if(error){
@@ -466,7 +410,7 @@ exports.addbenefits=function(request,response){
             break;
         case '2':
             dbconnect(schema,(error,{db})=>
-            db.query(`insert into Discount(discountName, flag, target2, dcRate, startDate, endDate) values(?,?,?,?,?,?)`,[post.discountName,post.flag,post.target2,post.dcRate,post.startDate,post.endDate],
+            db.query(`insert into Discount(discountName, flag, target2, dcRate, startDate, endDate, registrationDate) values(?,?,?,?,?,?,now())`,[post.discountName,post.flag,post.target2,post.dcRate,post.startDate,post.endDate],
                 function(error,value){   
                     db.end();      
                     if(error){

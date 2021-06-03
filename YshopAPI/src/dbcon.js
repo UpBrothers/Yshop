@@ -7,7 +7,8 @@ var dbconnect = (schema,callback)=>{
         user : dbinfo.user,               
         password : dbinfo.password,
         database : schema,
-        multipleStatements: true
+        multipleStatements: true,
+        dateStrings : 'date'
     });
     db.connect();
 

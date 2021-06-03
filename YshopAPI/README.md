@@ -130,31 +130,14 @@
 ||shopPhone|스토어 전화번호
 ||shopAddress|스토어 주소
 ||description|스토어 설명
-|categoryinfo|gorupName1|그룹 대분류 이름
+|categoryinfo|groupPK1|그룹 대분류 이름
+||gorupName1|그룹 대분류 이름
+||groupPK2|그룹 중분류 이름
 ||gorupName2|그룹 중분류 이름
+||groupPK3|그룹 소분류 이름
 ||gorupName3|그룹 소분류 이름
 
-
-# 5. CategoryInfo (카테고리정보) - 구매자
-
->- API URL :　
->- 요청 (GET)
-
-|변수명|설명|ex|
-|------|---|---|
-|*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
-
->- 응답
->   > 카테고리 정렬 순서대로 응답
-
-|변수명|설명|
-|------|---|
-|gorupName1|그룹 대분류 이름
-|gorupName2|그룹 중분류 이름
-|gorupName3|그룹 소분류 이름
-
-
-# 6. ProductList (상품조회) - 판매자
+# 5. ProductList (상품조회) - 판매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -170,6 +153,10 @@
 |productPK|상품 고유번호
 |name|상품 이름
 |price|상품 가격
+|thumbnail|상품 썸네일
+|option1|1번째 옵션 종류
+|option2|2번째 옵션 종류
+|option3|3번째 옵션 종류
 |stock|상품 재고수량 (모든 옵션 포함)
 |status|판매 상태
 |registrationDate|등록일자
@@ -180,7 +167,7 @@
 |groupPK3|그룹 소분류 고유번호
 |gorupName3|그룹 소분류 이름
 
-# 7. RemoveProduct (상품 삭제) - 판매자
+# 6. RemoveProduct (상품 삭제) - 판매자
 
 >- API URL :　
 >- 요청 (POST)
@@ -196,7 +183,7 @@
 |------|---|
 |Success|Fail
 
-# 8. CategoryList (카테고리정보) - 판매자
+# 7. CategoryList (카테고리정보) - 판매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -209,14 +196,14 @@
 
 |변수명|설명|
 |------|---|
-|groupPK1|그룹 대분류 이름
+|groupPK1|그룹 대분류 이름 
 |gorupName1|그룹 대분류 이름
 |groupPK2|그룹 중분류 이름
 |gorupName2|그룹 중분류 이름
 |groupPK3|그룹 소분류 이름
 |gorupName3|그룹 소분류 이름
 
-# 9. AddCategory (카테고리 등록) - 판매자
+# 8. AddCategory (카테고리 등록) - 판매자
 
 >- API URL :　
 >- 요청 (POST)
@@ -224,7 +211,10 @@
 |변수명|설명|ex|
 |------|---|---|
 |*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
-|*list [ (1) 대분류, (1) 중분류, (1) 소분류]|카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능|[의류, 상의, 티셔츠], [의류, 상의], [의류]|
+|*groupName|그룹 명|상의
+|*depth|대분류, 중분류, 소분류 구분|중분류
+|*parent|현재 그룹의 직전 상위 그룹 고유번호|1
+
 
 >- 응답
 
@@ -232,7 +222,7 @@
 |------|---|
 |Success|Fail
 
-# 10. RemoveCategory(카테고리 삭제) - 판매자
+# 9. RemoveCategory(카테고리 삭제) - 판매자
 
 >- API URL :　
 >- 요청 (POST)
@@ -240,7 +230,8 @@
 |변수명|설명|ex|
 |------|---|---|
 |*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey
-|*list [ (1) 대분류, (1) 중분류, (1) 소분류]|카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능|[의류, 상의, 티셔츠], [의류, 상의], [의류]|
+|*groupPK|그룹 고유번호|1
+
 
 >- 응답
 
@@ -248,7 +239,7 @@
 |------|---|
 |Success|Fail
 
-# 11. BenefitsList (혜택 정보) - 판매자
+# 10. BenefitsList (혜택 정보) - 판매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -263,14 +254,16 @@
 |------|---|
 |discountPK|할인정보 고유번호
 |discountName|할인 이름
-|flag|할인 대상(전체, 그룹별, 상품)
-|target|할인 대상 고유번호
+|flag|할인 대상 (0 : 전체, 그룹별, 1:상품)
+|target1|할인 그룹 고유번호
+|target2|할인 상품 고유번호
+|resultname|할인 대상 이름
 |dcRate|할인률
 |startDate|할인 시작일
 |endDate|할인 마감일
 
 
-# 12. AddBenefits (혜택 등록) - 판매자
+# 11. AddBenefits (혜택 등록) - 판매자
 
 >- API URL :　
 >- 요청 (POST)
@@ -278,8 +271,8 @@
 |변수명|설명|ex|
 |------|---|---|
 |*schema|스키마 명|www.yshop/cutomer/mingkey -> mingkey|
-|*discountName|할인 명|3
-|*flag|할인 범위|1, 2, 3, 4 (대분류, 중분류, 소분류, 상품별)
+|*discountName|할인 명|여름 반팔 티 할인전
+|*flag|할인 범위|할인 대상(0 : 전체, 그룹별, 1:상품)
 |(1) target1|그룹 고유번호|3
 |(1) target2|상품 고유번호|4
 |*dcRate|할인률|5
@@ -293,7 +286,7 @@
 |------|---|
 |Success|Fail
 
-# 13. RemoveBenefits (혜택 삭제) - 판매자
+# 12. RemoveBenefits (혜택 삭제) - 판매자
 
 >- API URL :　
 >- 요청 (POST)
@@ -309,7 +302,7 @@
 |------|---|
 |Success|Fail
 
-# 14. ShowProductList(상품 목록 전체) - 구매자
+# 13. ShowProductList(상품 목록 전체) - 구매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -335,7 +328,7 @@
 |stock|상품 재고수
 |dcRate|할인률
 
-# 15. ProductInfo(상품 상세보기) - 구매자
+# 14. ProductInfo(상품 상세보기) - 구매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -388,7 +381,7 @@
 |||flage|문의 종류(0: 상품문의, 1: 제고문의, 2: 배송문의)
 
 
-# 16. ProductInfo(상품 상세보기) - 판매자
+# 15. ProductInfo(상품 상세보기) - 판매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -414,6 +407,9 @@
 |||likecount|상품 좋아요 수
 |||stock|상품 재고수
 |||dcRate|할인률
+|||option1|1번째 옵션 종류
+|||option2|2번째 옵션 종류
+|||option3|3번째 옵션 종류
 ||Option|stockPK|옵션 고유 번호
 |||productPK|상품 고유번호
 |||option1PK|1번째 옵션
@@ -429,7 +425,7 @@
 |||groupPK1|소분류 고유 번호
 |||groupName1|소분류 이름
 
-# 17. AddProduct(상품 등록) - 판매자
+# 16. AddProduct(상품 등록) - 판매자
 
 >- API URL :　
 >- 요청 (GET)
@@ -447,7 +443,8 @@
 |*optionstock[]|*option[]|옵션 경우의 수|옵션 선택|[블랙, L], [화이트, M]
 |||*stock||해당 옵션 재고 수|50
 |||*extraCharge||해당 옵션 추가 금액|5000
-|*list [ (1) 대분류, (1) 중분류, (1) 소분류]||카테고리 명 (대분류, 중분류, 소분류) - 상위 분류 입력해야지 하위 분류 입력가능||[의류, 상의, 티셔츠],[의류, 상의],[의류]
+|*groupPK|그룹 고유번호|1
+
 
 <br>
 
@@ -455,36 +452,26 @@
 
 {<br>
     　"schema" : "shop_template",<br>
-    　"name" : "안녕",<br>
-    　"price" : "90000",<br>
-    　"thumbnail" : "www",<br>
-    　"image" : ["naver"],<br>
-    　"option" : ["색상","사이즈"],<br>
-    　"registration" : "2021-07-30",<br>
-    　"status" :"1",<br>
+    　"groupPK" : 4,<br>
+    　"name" : "쫀쫀 티셔츠",<br>
+    　"price" : "10000",<br>
+    　"thumbnail" : “test_image3.png",<br>
+    　"image" : ["test_image3.png"],<br>
+    　"status" : 1,<br>
+    　"stock" : 3,<br>
+    　"option" : ["컬러"],<br>
     　"optionstock" : [<br>
-        　　{<br>
-        　　　"option" : ["블랙","L"],<br>
-        　　　"stock" : "50",<br>
-        　　　"extraCharge" : "50"<br>
-        　　},<br>
-        　　{<br>
-        　　　"option" : ["파랑","M"],<br>
-        　　　"stock" : "100",<br>
-        　　　"extraCharge" : "9000"<br>
-        　　},<br>
-        　　{<br>
-        　　　"option" : ["보라","S"],<br>
-        　　　"stock" : "190",<br>
-        　　　"extraCharge" : "900"<br>
-        　　},<br>
-        　　{<br>
-        　　　"option" : ["빨강","L"],<br>
-        　　　"stock" : "110",<br>
-        　　　"extraCharge" : "100"<br>
-        　　}<br>
-    　],<br>
-    　"list" : ["의류","하의","청바지"]<br>
+        　　　　{<br>
+            　　　　　　"option" : ["빨강"],<br>
+            　　　　　　"stock" : "1",<br>
+            　　　　　　"extraCharge" : "1000"<br>
+        　　　　},<br>
+        　　　　{<br>
+            　　　　　　"option" : ["노랑"],<br>
+            　　　　　　"stock" : "2",<br>
+            　　　　　　"extraCharge" : "2000"<br>
+        　　　　}<br>
+    　　]<br>
 }<br>
 
 
@@ -495,7 +482,7 @@
 |Success|Fail
 
 
-# 18. Find (아이디, 비밀번호 찾기) - 구매자, 판매자
+# 17. Find (아이디, 비밀번호 찾기) - 구매자, 판매자
 
 >- API URL :　
 >- 요청 (POST)
@@ -518,7 +505,7 @@
 |아이디 찾기|해당 아이디|[]
 |비밀번호 찾기|cnt = 1|cnt = 0
 
-# 19. ModifyPW (비밀번호 수정) - 구매자, 판매자
+# 18. ModifyPW (비밀번호 수정) - 구매자, 판매자
 
 >- API URL :　
 >- 요청 (POST)
